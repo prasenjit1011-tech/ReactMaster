@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+p{
+  /* text-decoration: underline; */
+  margin: 1px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
