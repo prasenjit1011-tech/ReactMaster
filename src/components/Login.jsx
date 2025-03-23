@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = () => {
@@ -8,6 +9,7 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -26,6 +28,8 @@ const Login = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       console.log('Login attempt with:', formData);
       // Add your API call here later
+      // For now, just navigate to dashboard
+      navigate('/dashboard');
     } catch (err) {
       setError('Login failed. Please try again.');
     } finally {
