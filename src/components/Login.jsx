@@ -1,39 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, clearError } from '../store/slices/authSlice';
 import './Login.css';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    emailId: '',
-    password: ''
-  });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({ emailId: '', password: '' });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isAuthenticated && !loading) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, loading, navigate]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => dispatch(clearError()), 3000);
+    }
+  }, [error, dispatch]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
+    dispatch(clearError());
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Login attempt with:', formData);
-      // Add your API call here later
-      // For now, just navigate to dashboard
-      navigate('/dashboard');
+      await dispatch(loginUser(formData)).unwrap();
     } catch (err) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
+      console.error("Login failed:", err);
     }
   };
 
@@ -41,7 +41,12 @@ const Login = () => {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        {error && <div className="error-message">{error}</div>}
+        {error && (
+          <div className="error-message">
+            {error}
+            <button onClick={() => dispatch(clearError())} className="close-error">✖</button>
+          </div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="emailId">Email</label>
@@ -67,11 +72,7 @@ const Login = () => {
               required
             />
           </div>
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
+          <button type="submit" className="login-button" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
@@ -83,4 +84,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;
