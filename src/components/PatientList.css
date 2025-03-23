@@ -1,0 +1,295 @@
+.patient-list-container {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Styles */
+.patient-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-left h2 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 24px;
+}
+
+.header-left p {
+  margin: 5px 0 0;
+  color: #7f8c8d;
+}
+
+.add-patient-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s;
+}
+
+.add-patient-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Filters Section */
+.filters-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 16px 10px 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #7f8c8d;
+}
+
+.status-filter select {
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2c3e50;
+  background-color: white;
+  cursor: pointer;
+}
+
+/* Table Styles */
+.patient-table-container {
+  overflow-x: auto;
+}
+
+.patient-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.patient-table th,
+.patient-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.patient-table th {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.patient-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Patient Name Column */
+.patient-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.patient-full-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+/* Contact Info Column */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.email {
+  color: #2c3e50;
+}
+
+.phone {
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.inactive {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.action-btn.view {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.action-btn.edit {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+.action-btn.delete {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.action-btn:hover {
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+  }
+
+  .patient-table th,
+  .patient-table td {
+    padding: 12px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #3498db;
+}
+
+.loading-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.loading-state p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Error State */
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #e74c3c;
+  text-align: center;
+}
+
+.error-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.error-state p {
+  margin: 0 0 16px;
+  font-size: 16px;
+}
+
+.retry-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.retry-btn:hover {
+  background-color: #2980b9;
+}
+
+/* No Data State */
+.no-data-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #7f8c8d;
+  text-align: center;
+}
+
+.no-data-state i {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.no-data-state p {
+  margin: 0;
+  font-size: 16px;
+} 

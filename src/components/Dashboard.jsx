@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import PatientList from './PatientList';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -27,8 +28,8 @@ const Dashboard = () => {
               <span>Home</span>
             </li>
             <li>
-              <i className="fas fa-user"></i>
-              <span>Profile</span>
+              <i className="fas fa-users"></i>
+              <span>Patients</span>
             </li>
             <li>
               <i className="fas fa-cog"></i>
@@ -119,35 +120,11 @@ const Dashboard = () => {
                 <span>2 minutes ago</span>
               </div>
             </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="fas fa-file-alt"></i>
-              </div>
-              <div className="activity-content">
-                <p>New report generated</p>
-                <span>15 minutes ago</span>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="fas fa-comment"></i>
-              </div>
-              <div className="activity-content">
-                <p>New comment on project</p>
-                <span>1 hour ago</span>
-              </div>
-            </div>
-            <div className="activity-item">
-              <div className="activity-icon">
-                <i className="fas fa-tasks"></i>
-              </div>
-              <div className="activity-content">
-                <p>Task completed</p>
-                <span>2 hours ago</span>
-              </div>
-            </div>
+            
           </div>
         </div>
+        <br />
+        <PatientList />
       </div>
     </div>
   );
