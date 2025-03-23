@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './Login.css';
+import './Register.css';
 
-const Login = () => {
+const Register = () => {
   const [formData, setFormData] = useState({
+    fullName: '',
     emailId: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -22,27 +24,46 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Login attempt with:', formData);
+      console.log('Registration attempt with:', formData);
       // Add your API call here later
-      // For now, just navigate to dashboard
-      navigate('/dashboard');
+      // For now, just navigate to login
+      navigate('/login');
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Login</h2>
+    <div className="register-container">
+      <div className="register-box">
+        <h2>Create Account</h2>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="emailId">Email</label>
             <input
@@ -63,24 +84,36 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Create a password"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              placeholder="Confirm your password"
               required
             />
           </div>
           <button 
             type="submit" 
-            className="login-button"
+            className="register-button"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Creating Account...' : 'Register'}
           </button>
         </form>
-        <div className="register-link">
-          Don't have an account? <Link to="/register">Register here</Link>
+        <div className="login-link">
+          Already have an account? <Link to="/login">Login here</Link>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login; 
+export default Register; 

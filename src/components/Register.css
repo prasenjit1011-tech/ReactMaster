@@ -1,4 +1,4 @@
-.login-container {
+.register-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@
   padding: 20px;
 }
 
-.login-box {
+.register-box {
   background: white;
   padding: 2rem;
   border-radius: 8px;
@@ -16,7 +16,7 @@
   max-width: 400px;
 }
 
-.login-box h2 {
+.register-box h2 {
   text-align: center;
   color: #2c3e50;
   margin-bottom: 1.5rem;
@@ -47,7 +47,7 @@
   border-color: #3498db;
 }
 
-.login-button {
+.register-button {
   width: 100%;
   padding: 0.75rem;
   background-color: #3498db;
@@ -60,11 +60,11 @@
   margin-top: 1rem;
 }
 
-.login-button:hover {
+.register-button:hover {
   background-color: #2980b9;
 }
 
-.login-button:disabled {
+.register-button:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
@@ -78,18 +78,18 @@
   text-align: center;
 }
 
-.register-link {
+.login-link {
   text-align: center;
   margin-top: 1rem;
   color: #2c3e50;
 }
 
-.register-link a {
+.login-link a {
   color: #3498db;
   text-decoration: none;
   font-weight: 500;
 }
 
-.register-link a:hover {
+.login-link a:hover {
   text-decoration: underline;
 } 
