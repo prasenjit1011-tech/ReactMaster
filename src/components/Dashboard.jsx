@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import PatientList from './PatientList';
@@ -24,12 +24,16 @@ const Dashboard = () => {
         <nav className="menu">
           <ul>
             <li className="active">
-              <i className="fas fa-home"></i>
-              <span>Home</span>
+              <Link to="/dashboard">
+                <i className="fas fa-home"></i>
+                <span>Home</span>
+              </Link>
             </li>
             <li>
-              <i className="fas fa-users"></i>
-              <span>Patients</span>
+              <Link to="/patients">
+                <i className="fas fa-users"></i>
+                <span>Patients</span>
+              </Link>
             </li>
             <li>
               <i className="fas fa-cog"></i>
