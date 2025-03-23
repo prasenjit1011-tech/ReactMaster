@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { loginApi } from '../../services/api';
+import { loginApi, registerApi } from '../../services/api';
 
 // Async thunks for API calls
 export const loginUser = createAsyncThunk(
@@ -18,10 +18,8 @@ export const registerUser = createAsyncThunk(
   'auth/register',
   async (userData, { rejectWithValue }) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Add your actual API call here
-      return userData;
+      const response = await registerApi(userData);
+      return response;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -72,6 +70,7 @@ const authSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.isAuthenticated = true;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

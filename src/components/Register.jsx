@@ -6,7 +6,8 @@ import './Register.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     emailId: '',
     password: '',
     confirmPassword: ''
@@ -33,6 +34,24 @@ const Register = () => {
     dispatch(clearError());
 
     // Basic validation
+    if (!formData.firstName || !formData.lastName || !formData.emailId || !formData.password || !formData.confirmPassword) {
+      dispatch(registerUser.rejected({ message: 'Please fill in all fields' }));
+      return;
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.emailId)) {
+      dispatch(registerUser.rejected({ message: 'Please enter a valid email address' }));
+      return;
+    }
+
+    // Password validation
+    if (formData.password.length < 6) {
+      dispatch(registerUser.rejected({ message: 'Password must be at least 6 characters long' }));
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       dispatch(registerUser.rejected({ message: 'Passwords do not match' }));
       return;
@@ -50,14 +69,26 @@ const Register = () => {
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="fullName">Full Name</label>
+            <label htmlFor="firstName">First Name</label>
             <input
               type="text"
-              id="fullName"
-              name="fullName"
-              value={formData.fullName}
+              id="firstName"
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
-              placeholder="Enter your full name"
+              placeholder="Enter your first name"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="lastName">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder="Enter your last name"
               required
             />
           </div>
