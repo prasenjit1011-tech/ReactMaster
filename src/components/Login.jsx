@@ -5,48 +5,52 @@ import { loginUser, clearError } from '../store/slices/authSlice';
 import './Login.css';
 
 const Login = () => {
-  const [formData, setFormData] = useState({ emailId: '', password: '' });
+  const [formData, setFormData] = useState({
+    emailId: '',
+    password: ''
+  });
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isAuthenticated && !loading) {
+    if (isAuthenticated) {
       navigate('/dashboard');
     }
-  }, [isAuthenticated, loading, navigate]);
-
-  useEffect(() => {
-    if (error) {
-      setTimeout(() => dispatch(clearError()), 3000);
-    }
-  }, [error, dispatch]);
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(clearError());
     
-    try {
-      await dispatch(loginUser(formData)).unwrap();
-    } catch (err) {
-      console.error("Login failed:", err);
+    // Basic validation
+    if (!formData.emailId || !formData.password) {
+      dispatch(loginUser.rejected({ message: 'Please fill in all fields' }));
+      return;
     }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.emailId)) {
+      dispatch(loginUser.rejected({ message: 'Please enter a valid email address' }));
+      return;
+    }
+
+    dispatch(loginUser(formData));
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
-        {error && (
-          <div className="error-message">
-            {error}
-            <button onClick={() => dispatch(clearError())} className="close-error">✖</button>
-          </div>
-        )}
+        {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="emailId">Email</label>
@@ -72,7 +76,11 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="login-button" disabled={loading}>
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
+          >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
