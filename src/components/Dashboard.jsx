@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import PatientList from './PatientList';
 import './Dashboard.css';
+import UserMenu from './UserMenu';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -21,38 +22,7 @@ const Dashboard = () => {
         <div className="logo">
           <h2>Dashboard</h2>
         </div>
-        <nav className="menu">
-          <ul>
-            <li className="active">
-              <Link to="/dashboard">
-                <i className="fas fa-home"></i>
-                <span>Home</span>
-              </Link>
-            </li>
-            <li>
-              <Link to="/patients">
-                <i className="fas fa-users"></i>
-                <span>Patients</span>
-              </Link>
-            </li>
-            <li>
-              <i className="fas fa-cog"></i>
-              <span>Settings</span>
-            </li>
-            <li>
-              <i className="fas fa-chart-bar"></i>
-              <span>Analytics</span>
-            </li>
-            <li>
-              <i className="fas fa-bell"></i>
-              <span>Notifications</span>
-            </li>
-            <li className="logout-item" onClick={handleLogout}>
-              <i className="fas fa-sign-out-alt"></i>
-              <span>Logout</span>
-            </li>
-          </ul>
-        </nav>
+        <UserMenu />
       </div>
 
       {/* Main Content */}
@@ -124,11 +94,8 @@ const Dashboard = () => {
                 <span>2 minutes ago</span>
               </div>
             </div>
-            
           </div>
         </div>
-        <br />
-        <PatientList />
       </div>
     </div>
   );

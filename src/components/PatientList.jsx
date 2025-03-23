@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from "react-router-dom";
 import './PatientList.css';
 
-const PatientList = () => {
+const PatientList = ({type}) => {
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [patients, setPatients] = useState([]);
@@ -10,11 +12,13 @@ const PatientList = () => {
 
   useEffect(() => {
     fetchPatients();
-  }, []);
+  }, [location.pathname]);
 
   const fetchPatients = async () => {
     try {
-      const response = await fetch('http://localhost:3000/users');
+      
+      const apiUrl = 'http://localhost:3000/users?type='+type;
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error('Failed to fetch patients');
       }
@@ -65,7 +69,7 @@ const PatientList = () => {
       {/* Header Section */}
       <div className="patient-list-header">
         <div className="header-left">
-          <h2>Patient List</h2>
+          <h2>{type.charAt(0).toUpperCase() + type.slice(1)} List</h2>
           <p>Manage and view all patient records</p>
         </div>
         <div className="header-right">
@@ -135,8 +139,7 @@ const PatientList = () => {
                   </td>
                   <td>
                     <div className="contact-info">
-                      <div className="email">{patient.email}</div>
-                      <div className="phone">{patient.phone}</div>
+                      <div className="email">{patient.emailId}</div>
                     </div>
                   </td>
                   <td>

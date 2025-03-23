@@ -35,10 +35,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  background-color: #8b9bab;
 }
 
 .menu li:hover {
-  background-color: #34495e;
+  background-color: #8b9bab;
 }
 
 .menu li.active {

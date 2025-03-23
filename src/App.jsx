@@ -5,6 +5,7 @@ import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import './App.css';
+import UserList from './components/UserList';
 
 function App() {
   return (
@@ -21,6 +22,23 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/patients" 
+            element={
+              <ProtectedRoute>
+                <UserList type="patient" />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/provider" 
+            element={
+              <ProtectedRoute>
+                <UserList type="provider" />
+              </ProtectedRoute>
+            } 
+          />
+          
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </div>
