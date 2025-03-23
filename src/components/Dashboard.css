@@ -223,4 +223,13 @@
 .menu ul li.active a {
   background-color: #3498db;
   color: white;
+}
+
+.menu ul li.logout-item a {
+  color: #e74c3c;
+}
+
+.menu ul li.logout-item a:hover {
+  background-color: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
 } 

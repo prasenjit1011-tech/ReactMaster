@@ -1,18 +1,135 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
 import PatientList from './PatientList';
 import './Dashboard.css';
 import UserMenu from './UserMenu';
+import HealthReportFrm from './HealthReportFrm';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
+  };
+
+  const renderMenuItems = () => {
+    if (!user) return null;
+
+
+    console.log('>>>>>>',user)
+
+    const commonMenuItems = [
+      {
+        icon: 'fa-home',
+        label: 'Home',
+        path: '/dashboard',
+        active: true
+      },
+      {
+        icon: 'fa-bell',
+        label: 'Notifications',
+        path: '#'
+      }
+    ];
+
+    const patientMenuItems = [
+      {
+        icon: 'fa-calendar-check',
+        label: 'Appointments',
+        path: '#'
+      },
+      {
+        icon: 'fa-file-medical',
+        label: 'Medical Records',
+        path: '#'
+      },
+      {
+        icon: 'fa-pills',
+        label: 'Prescriptions',
+        path: '#'
+      }
+    ];
+
+    const providerMenuItems = [
+      {
+        icon: 'fa-users',
+        label: 'Patients',
+        path: '/patients'
+      },
+      {
+        icon: 'fa-calendar-plus',
+        label: 'Schedule',
+        path: '#'
+      },
+      {
+        icon: 'fa-file-medical-alt',
+        label: 'Patient Records',
+        path: '#'
+      }
+    ];
+
+    const adminMenuItems = [
+      {
+        icon: 'fa-users',
+        label: 'Patients',
+        path: '/patients'
+      },
+      {
+        icon: 'fa-user-md',
+        label: 'Providers',
+        path: '/provider'
+      },
+      {
+        icon: 'fa-cog',
+        label: 'Settings',
+        path: '#'
+      }
+    ];
+
+    let menuItems = [...commonMenuItems];
+
+    switch (user.user.type) {
+      case 'patient':
+        menuItems = [...menuItems, ...patientMenuItems];
+        break;
+      case 'provider':
+        menuItems = [...menuItems, ...providerMenuItems];
+        break;
+      case 'admin':
+        menuItems = [...menuItems, ...adminMenuItems];
+        break;
+      default:
+        break;
+    }
+
+    menuItems.push({
+      icon: 'fa-sign-out-alt',
+      label: 'Logout',
+      path: '#',
+      className: 'logout-item',
+      onClick: handleLogout
+    });
+
+    return menuItems.map((item, index) => (
+      <li key={index} className={item.className || ''}>
+        {item.onClick ? (
+          <a onClick={item.onClick} style={{ cursor: 'pointer' }}>
+            <i className={`fas ${item.icon}`}></i>
+            <span>{item.label}</span>
+          </a>
+        ) : (
+          <Link to={item.path}>
+            <i className={`fas ${item.icon}`}></i>
+            <span>{item.label}</span>
+          </Link>
+        )}
+      </li>
+    ));
   };
 
   return (
@@ -22,7 +139,11 @@ const Dashboard = () => {
         <div className="logo">
           <h2>Dashboard</h2>
         </div>
-        <UserMenu />
+        <nav className="menu">
+          <ul>
+            {renderMenuItems()}
+          </ul>
+        </nav>
       </div>
 
       {/* Main Content */}
@@ -40,6 +161,8 @@ const Dashboard = () => {
             </div>
           </div>
         </header>
+
+        <HealthReportFrm />
 
         {/* Stats Cards */}
         <div className="stats-grid">
