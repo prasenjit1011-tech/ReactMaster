@@ -36,7 +36,7 @@ const App = () => {
                       : "text-gray-600 hover:text-blue-600"
                   }
                 >
-                  Employees
+                  Employees | &nbsp;
                 </NavLink>
                 <NavLink
                   to="/countries"
@@ -46,7 +46,7 @@ const App = () => {
                       : "text-gray-600 hover:text-blue-600"
                   }
                 >
-                  Countries
+                  Countries | &nbsp;
                 </NavLink>
                 <NavLink
                   to="/add-country"

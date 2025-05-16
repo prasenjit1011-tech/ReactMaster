@@ -2,18 +2,7 @@
 import React from "react";
 import { useQuery, gql } from "@apollo/client";
 
-const GET_COUNTRIES = gql`
-  query {
-    countryDetails {
-      id
-      name
-      stateDetails {
-        id
-        name
-      }
-    }
-  }
-`;
+const GET_COUNTRIES = gql`query {countryDetails {id, name, stateDetails {id, name}}}`;
 
 const CountryList = () => {
   const { data, loading, error } = useQuery(GET_COUNTRIES);
