@@ -7,10 +7,10 @@ import './index.css'
 // import store from './store_reduxtoolkit.js'
 // import App from './App.jsx';
 
-// // Example : 02 :ReduxToolkit with Thunk
-// import { store } from './myreduxthunk.js';
-// import Login from './Login.jsx';
-// const App = Login;
+// Example : 02 :ReduxToolkit with Thunk
+import { store } from './myreduxthunk.js';
+import Login from './Login.jsx';
+const App = Login;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
