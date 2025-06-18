@@ -7,7 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useDispatch()
-  const { user, loading, error } = useSelector(state => state.auth)
+  const { user, loading, error, token } = useSelector(state => state.auth)
 
   const handleLogin = () => {
     dispatch(loginUser({ email, password }))
@@ -27,8 +27,9 @@ const Login = () => {
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {user && <p>Welcome {user.name}</p>}
+      {user && <p>Welcome {user.name} / {user.id}</p>}
       {!user && <p style={{color:'red'}}>Welcome Guest</p>}
+      {token && <p style={{color:'red'}}>Token Value {token}</p>}
     </div>
   )
 }
