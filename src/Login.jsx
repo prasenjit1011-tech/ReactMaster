@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser } from './myreduxthunk'
+import './App.css'
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,7 +27,7 @@ function Login() {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {user && <p>Welcome {user.name}</p>}
-      {!user && <p>Welcome Guest</p>}
+      {!user && <p style={{color:'red'}}>Welcome Guest</p>}
     </div>
   )
 }
