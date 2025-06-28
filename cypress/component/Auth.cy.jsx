@@ -8,7 +8,7 @@ describe('Component Login Test', () => {
     cy.get('input[placeholder="Email"]').type('admin@example.com');
     cy.get('input[placeholder="Password"]').type('password123');
 
-    cy.contains('Login').invoke('css', 'background-color', 'yellow').wait(10000);
+    cy.contains('Login').invoke('css', 'background-color', 'yellow').wait(5000);
     cy.contains('Login').click();
 
     cy.contains('Welcome, Admin').should('exist').wait(5000);
