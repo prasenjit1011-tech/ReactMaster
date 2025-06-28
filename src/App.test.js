@@ -3,6 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 import '@testing-library/jest-dom';
 
+
+// test('renders and logs in', () => {
+//   render(<App />);
+//   expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
+// });
+
 test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
   render(<App />);
 
@@ -41,8 +47,3 @@ test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
   expect(screen.getByText('Login')).toBeInTheDocument();
 });
 
-
-// test('renders and logs in', () => {
-//   render(<App />);
-//   expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
-// });
