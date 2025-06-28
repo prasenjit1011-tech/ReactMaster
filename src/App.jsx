@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import useDeviceWidth from './HookApp';
 import './App.css'
 
 export default function App() {
@@ -6,6 +7,7 @@ export default function App() {
   const [faq, setFaq] = useState([]);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
+  const deviceWidth = useDeviceWidth();
 
   if (!loggedIn) {
     return (
@@ -20,6 +22,7 @@ export default function App() {
   return (
     <div>
       <h2>Welcome, Admin</h2>
+      <h3>Device Width : {deviceWidth}</h3>
       <button onClick={() => setLoggedIn(false)}>Logout</button>
 
       <h3>Create FAQ</h3>

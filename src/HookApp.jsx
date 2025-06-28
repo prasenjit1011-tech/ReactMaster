@@ -1,7 +1,7 @@
 import './App.css'
 import React, { useState, useEffect } from 'react';
 
-function useDeviceWidth() {
+export default function useDeviceWidth() {
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -14,9 +14,4 @@ function useDeviceWidth() {
   }, []);
 
   return deviceWidth;
-}
-
-export default function HookApp() {
-  const deviceWidth = useDeviceWidth();
-  return <div>Current Device Width :- {deviceWidth}</div>;
 }
