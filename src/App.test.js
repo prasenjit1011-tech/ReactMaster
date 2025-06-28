@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
   render(<App />);
 
-  // Login
+  // ✅ Login
   fireEvent.change(screen.getByPlaceholderText('Email'), {
     target: { value: 'admin@example.com' },
   });
@@ -14,9 +14,10 @@ test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
     target: { value: 'password123' },
   });
   fireEvent.click(screen.getByText('Login'));
+
   expect(screen.getByText('Welcome, Admin')).toBeInTheDocument();
 
-  // Create FAQ
+  // ✅ Create FAQ
   fireEvent.change(screen.getByPlaceholderText('Enter question'), {
     target: { value: 'What is React?' },
   });
@@ -24,30 +25,18 @@ test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
     target: { value: 'React is a JS library for building UI.' },
   });
   fireEvent.click(screen.getByText('Add FAQ'));
-  
-  
-  //expect(screen.getByText('What is React?')).toBeInTheDocument();
 
-
+  // ✅ List FAQ
+  expect(screen.getByText('FAQ List')).toBeInTheDocument();
 
   const faqItem = screen.getByText('What is React?').closest('li');
   expect(faqItem).toHaveTextContent('React is a JS library for building UI.');
 
-
-  // List FAQ
-  expect(screen.getByText('FAQ List')).toBeInTheDocument();
-  expect(screen.getByText('React is a JS library for building UI.')).toBeInTheDocument();
-
-
-  
-
-
-
-  // Delete FAQ
+  // ✅ Delete FAQ
   fireEvent.click(screen.getByText('Delete'));
   expect(screen.queryByText('What is React?')).not.toBeInTheDocument();
 
-  // Logout
+  // ✅ Logout
   fireEvent.click(screen.getByText('Logout'));
   expect(screen.getByText('Login')).toBeInTheDocument();
 });
