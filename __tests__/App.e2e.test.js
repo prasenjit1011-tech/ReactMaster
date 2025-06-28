@@ -4,9 +4,15 @@ import App from '../src/App';
 import '@testing-library/jest-dom';
 
 test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
+  // Step 01 :
   render(<App />);
+  expect(screen.getByPlaceholderText(/email/i)).toBeInTheDocument();
+  expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
+  expect(screen.getByText('Login')).toBeInTheDocument();
 
-  // Login
+
+  // Step 02 : Login
+  /********************************************************************************* */
   fireEvent.change(screen.getByPlaceholderText('Email'), {
     target: { value: 'admin@example.com' },
   });
@@ -16,7 +22,10 @@ test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
   fireEvent.click(screen.getByText('Login'));
   expect(screen.getByText('Welcome, Admin')).toBeInTheDocument();
 
-  // Create FAQ
+
+
+  // Step 03 : FAQ CRUD
+  /********************************************************************************* */
   fireEvent.change(screen.getByPlaceholderText('Enter question'), {
     target: { value: 'What is React?' },
   });
@@ -34,7 +43,10 @@ test('E2E - Login, Create FAQ, List, Delete, Logout', () => {
   fireEvent.click(screen.getByText('Delete'));
   expect(screen.queryByText('What is React?')).not.toBeInTheDocument();
 
+
+
   // Logout
+  /********************************************************************************* */
   fireEvent.click(screen.getByText('Logout'));
   expect(screen.getByText('Login')).toBeInTheDocument();
 });
