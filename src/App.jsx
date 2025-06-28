@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState } from 'react';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [faq, setFaq] = useState([]);
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
+
+  if (!loggedIn) {
+    return (
+      <div>
+        <input placeholder="Email" />
+        <input placeholder="Password" type="password" />
+        <button onClick={() => setLoggedIn(true)}>Login</button>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <h2>Welcome, Admin</h2>
+      <button onClick={() => setLoggedIn(false)}>Logout</button>
 
-export default App
+      <h3>Create FAQ</h3>
+      <input placeholder="Enter question" value={question} onChange={e => setQuestion(e.target.value)} />
+      <input placeholder="Enter answer" value={answer} onChange={e => setAnswer(e.target.value)} />
+      <button onClick={() => {
+        setFaq([...faq, { question, answer }]);
+        setQuestion('');
+        setAnswer('');
+      }}>Add FAQ</button>
+
+      <h3>FAQ List</h3>
+      <ul>
+        {faq.map((item, index) => (
+          <li key={index}>
+            <strong>{item.question}</strong>: {item.answer}
+            <button onClick={() => setFaq(faq.filter((_, i) => i !== index))}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
