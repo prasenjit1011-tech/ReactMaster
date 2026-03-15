@@ -16,7 +16,9 @@
     "react-redux": "^9.0.4",
     "react-router-dom": "^6.21.1",
     "react-uploader": "^3.43.0",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "redux-observable": "^3.0.0-rc.3",
+    "redux-saga": "^1.4.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
