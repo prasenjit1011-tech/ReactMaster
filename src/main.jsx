@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import './index.css'
 import { App } from './App.jsx'
+import {AppTodoList} from './AppTodoList.jsx';
 import { store } from './store/store.js';
 
 import { Product } from './components/Product.jsx';
