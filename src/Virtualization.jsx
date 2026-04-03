@@ -27,7 +27,6 @@ const Row = React.memo(({ index, style }) => {
 const Virtualization = () => {
     return (
         <div style={{border:'2px solid #F00', width:'800px', padding:'5px', margin:'5px'}}>
-            <NotificationApp />
             <h3>React Virtualization</h3>
             <List
                 height={240}      // visible height
