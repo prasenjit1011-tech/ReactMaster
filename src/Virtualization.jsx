@@ -1,6 +1,7 @@
 import React from 'react';
 import { FixedSizeList as List } from 'react-window';
 import dramaList from './dramaList.json';
+import NotificationApp from './NotificationApp';
 
 const Row = React.memo(({ index, style }) => {
     const item = dramaList[index];
@@ -26,8 +27,8 @@ const Row = React.memo(({ index, style }) => {
 const Virtualization = () => {
     return (
         <div style={{border:'2px solid #F00', width:'800px', padding:'5px', margin:'5px'}}>
-            <h1>React Virtualization</h1>
-
+            <NotificationApp />
+            <h3>React Virtualization</h3>
             <List
                 height={240}      // visible height
                 itemCount={dramaList.length}  // total items
