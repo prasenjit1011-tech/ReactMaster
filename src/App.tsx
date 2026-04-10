@@ -12,9 +12,11 @@ function App(): JSX.Element {
       <div className="two-column">
           
             <button className={`${button.status ? 'btn active-button' : 'btn default-button'}`} onClick={button.handleClick}>
+              Custom Hook<br />
               {button.status ? 'Active' : 'Inactive'} : {button.cnt}
             </button>
             <button className={`${newButton.status ? 'btn active-button' : 'btn default-button'}`} onClick={newButton.handleClick}>
+              Custom Hook<br />
               {newButton.status ? 'Active' : 'Inactive'} : {newButton.cnt}
             </button>
           
