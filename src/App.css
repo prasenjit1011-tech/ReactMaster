@@ -41,16 +41,66 @@
   color: #888;
 }
 
+.layout-toggle {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.layout-btn {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+}
+
+.layout-btn:hover {
+  background-color: #e0e0e0;
+  border-color: #999;
+}
+
+.layout-btn.layout-active {
+  background-color: #61dafb;
+  color: white;
+  border-color: #0ea5e9;
+}
+
 .two-column {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  transition: all 0.4s ease-in-out;
+}
+
+.two-column.layout-left {
+  grid-template-columns: 1fr;
+}
+
+.two-column.layout-left .right {
+  display: none;
+}
+
+.two-column.layout-right {
+  grid-template-columns: 1fr;
+}
+
+.two-column.layout-right .left {
+  display: none;
+}
+
+.two-column.layout-both {
+  grid-template-columns: 1fr 1fr;
 }
 
 .left, .right {
   padding: 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
+  transition: all 0.4s ease-in-out;
 }
 
 @media (max-width: 768px) {
@@ -60,24 +110,48 @@
 }
 
 .btn{
-  width: 150px;
-  height: 50px;
+  width: 200px;
+  height: 60px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .active-button{
   background-color: #61dafb;
   color: white;
-  border: none;
+  border: 2px solid #0ea5e9;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+.active-button:hover {
+  background-color: #0ea5e9;
+  border-color: #0284c7;
 }
 
 .default-button{
   background-color: #ddd;
-  color: black;
-  border: none;
+  color: #333;
+  border: 2px solid #bbb;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+.default-button:hover {
+  background-color: #bbb;
+  border-color: #999;
 }
