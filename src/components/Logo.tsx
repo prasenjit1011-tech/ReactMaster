@@ -8,7 +8,6 @@ function Logo(): JSX.Element {
 
   return (
     <div className="left">
-
         <div>
             <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
                 <img src={viteLogo} className="logo" alt="Vite logo" />

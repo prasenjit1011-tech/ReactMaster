@@ -64,22 +64,13 @@
   height: 50px;
 }
 
-.active-button{
-  background-color: #61dafb;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: small;
-}
-
 .default-button{
   background-color: #ddd;
   color: black;
-  border: none;
+  border: 1px solid #000;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: small;
+  margin: 5px;
 }
