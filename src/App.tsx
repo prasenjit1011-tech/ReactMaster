@@ -6,7 +6,7 @@ import ProductComponent from "./components/product/Product";
 
 function App(): JSX.Element {
   return (
-    <div"> className="app
+    <div className="app">
       <div className="two-column">
           <div className="left">
             <Logo />
