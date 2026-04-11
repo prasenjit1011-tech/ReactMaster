@@ -1,15 +1,17 @@
 import "./App.css";
+import ApiHook from "./components/ApiHook";
 import BtnHook from "./components/BtnHook";
 import Logo from "./components/Logo";
 import ProductComponent from "./components/product/Product";
 
 function App(): JSX.Element {
   return (
-    <div className="app">
+    <div"> className="app
       <div className="two-column">
           <div className="left">
             <Logo />
             <BtnHook />
+            <ApiHook />
           </div>
           <ProductComponent />
       </div>

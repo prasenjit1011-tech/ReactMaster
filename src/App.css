@@ -74,3 +74,11 @@
   font-size: small;
   margin: 5px;
 }
+
+.apiBox{
+  display: flex;
+  border-top: 1px solid #000;
+  margin-top: 10px;
+  padding-top: 5px;
+  background-color: aqua;
+}
