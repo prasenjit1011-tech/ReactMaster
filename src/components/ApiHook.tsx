@@ -12,7 +12,7 @@ export default function ApiHook(): JSX.Element {
             <div>Hook Name {apiData.name}</div>
             <div>Description: {apiData.description}</div>
             <hr />
-            {apiData.data && apiData.data.map((item: any) => (
+            {apiData.data && apiData.data.slice(0, 5).map((item: any) => (
                 <div key={item.id} style={{textAlign:'left'}}>
                     {item.id}) {item.title}
                 </div>
@@ -23,7 +23,7 @@ export default function ApiHook(): JSX.Element {
             <div>Hook Name {newApiData.name}</div>
             <div>Description: {newApiData.description}</div>
             <hr />
-            {newApiData.data && newApiData.data.map((item: any) => (
+            {newApiData.data && newApiData.data.slice(0, 5).map((item: any) => (
                 <div key={item.id} style={{textAlign:'left'}}>
                     {item.id}) {item.title}
                 </div>

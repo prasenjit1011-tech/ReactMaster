@@ -78,8 +78,10 @@
 .apiBox{
   display: flex;
   border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
   margin-top: 10px;
   padding-top: 5px;
+  padding-bottom: 5px;
   background-color: aqua;
 }
 
