@@ -3,6 +3,8 @@ import ApiHook from "./components/ApiHook";
 import BtnHook from "./components/BtnHook";
 import Logo from "./components/Logo";
 import ProductComponent from "./components/product/Product";
+import NotificationApp from "./components/NotificationApp";
+import Virtualization from "./components/Virtualization";
 
 function App(): JSX.Element {
   return (
@@ -12,6 +14,9 @@ function App(): JSX.Element {
             <Logo />
             <BtnHook />
             <ApiHook />
+            <hr />
+            <NotificationApp />
+            <Virtualization />
           </div>
           <ProductComponent />
       </div>
