@@ -1,13 +1,11 @@
 import { useCallback } from "react";
-import { useSelector } from "react-redux";
 import Form from "./Form";
 import List from "./List";
 import { useProducts } from "../../hooks/useProducts";
 import { Product } from "./types";
-import type { RootState } from "../../redux/store";
+
 
 function ProductComponent(): JSX.Element {
-  const clickCount = useSelector((state: RootState) => state.clickCnt.count);
   const {
     products,
     editing,
@@ -29,12 +27,8 @@ function ProductComponent(): JSX.Element {
   );
 
   return (
-    <div className="right">
+    <>
       <h4>Product CRUD</h4>
-      <p className="clickBtn">
-        Button clicks: {clickCount}
-      </p>
-
       <Form
         onSubmit={handleSubmit}
         editing={editing}
@@ -45,7 +39,7 @@ function ProductComponent(): JSX.Element {
         onDelete={deleteProduct}
         onEdit={editProduct}
       />
-    </div>
+    </>
   );
 }
 

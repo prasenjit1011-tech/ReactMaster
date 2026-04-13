@@ -5,6 +5,7 @@ import Logo from "./components/Logo";
 import ProductComponent from "./components/product/Product";
 import NotificationApp from "./components/NotificationApp";
 import Virtualization from "./components/Virtualization";
+import BtnRedux from "./components/BtnRedux";
 
 function App(): JSX.Element {
   return (
@@ -13,12 +14,15 @@ function App(): JSX.Element {
           <div className="left">
             <Logo />
             <BtnHook />
-            <ApiHook />
-            <hr />
+            <ApiHook />            
+          </div>
+          <div className="right">
+            <BtnRedux />
             <NotificationApp />
             <Virtualization />
+            <hr />
+            <ProductComponent />
           </div>
-          <ProductComponent />
       </div>
     </div>
   );
