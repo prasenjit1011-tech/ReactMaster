@@ -2,8 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Virtualization from './Virtualization'
-import NotificationApp from './NotificationApp'
+import Virtualization from './components/Virtualization'
+import NotificationApp from './components/NotificationApp'
 
 function App() {
   const [count, setCount] = useState(0)
