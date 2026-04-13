@@ -1,6 +1,6 @@
 import React from 'react';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
-import dramaList from '../dramaList.json';
+import dramaList from '../assets/dramaList.json';
 
 // ✅ Define type for each item
 type DramaItem = {
