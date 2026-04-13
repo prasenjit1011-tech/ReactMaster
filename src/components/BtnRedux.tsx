@@ -7,7 +7,7 @@ export default function BtnRedux(): JSX.Element {
     return (
         <div>
             <p className="clickBtn">
-                Button clicks: {clickCount}
+                Redux Button clicks: {clickCount}
             </p>
         </div>
     );

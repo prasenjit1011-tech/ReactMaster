@@ -23,10 +23,10 @@ function Logo(): JSX.Element {
         </div>
         <div className="card">
             <button onClick={() => setCnt(prev => prev + 1)} className="default-button">
-                count is {count}
+                useState Count {count}
             </button>
             <button onClick={() => dispatch(increment())} className="default-button">
-                count is {cnt}
+                Redux Count {cnt}
             </button>
         </div>
     </div>
