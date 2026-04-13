@@ -32,7 +32,7 @@ function NotificationApp() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Send Test Notification
+        Send Test Notification : notification_socket_redis_react
       </a>
 
       {notifications.map((n, i) => (
