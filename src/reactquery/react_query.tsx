@@ -23,6 +23,7 @@ interface ProductResponse {
 
 /* ================= API ================= */
 
+const LIMIT = 3;
 const fetchProducts = async (   page: number,    limit: number,    signal?: AbortSignal): Promise<ProductResponse> => {
     const url = `http://localhost:3000/productlist?page=${page}&limit=${limit}`;
     const res = await fetch(url,{ signal });
@@ -33,7 +34,7 @@ const fetchProducts = async (   page: number,    limit: number,    signal?: Abor
 
 /* ================= CONSTANTS ================= */
 
-const LIMIT = 3;
+
 
 /* ================= APP ================= */
 
@@ -43,7 +44,7 @@ const App: React.FC = () => {
 
     const { data, isLoading, isError, error, isFetching } =
         useQuery<ProductResponse>({
-            queryKey: ["products", page, LIMIT],
+            queryKey: ["productdata", page, LIMIT],
             queryFn: ({ signal }) => fetchProducts(page, LIMIT, signal),
 
             // ✅ React Query v5 replacement for keepPreviousData
