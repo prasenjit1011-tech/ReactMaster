@@ -1,98 +1,72 @@
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
-
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery, useQueryClient} from "@tanstack/react-query";
 
 /* ================= TYPES ================= */
-
+const LIMIT = 3;
 interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  stock: number;
-  createdAt: string;
-  updatedAt: string;
+    _id: string;
+    name: string;
+    price: number;
+    stock: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 interface ProductResponse {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  data: Product[];
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    data: Product[];
 }
-
-/* ================= CONFIG ================= */
-
-const LIMIT = 3;
 
 /* ================= API ================= */
 
-const fetchProducts = async (
-  page: number,
-  limit: number,
-  signal?: AbortSignal
-): Promise<ProductResponse> => {
-  const url = `http://localhost:3000/productlist?page=${page}&limit=${limit}`;
+const fetchProducts = async ( page: number, limit: number, signal?: AbortSignal): Promise<ProductResponse> => {
+    const url   = `http://localhost:3000/productlist?page=${page}&limit=${limit}`;
+    const res   = await fetch(url, { signal });
+    if (!res.ok) {
+        throw new Error("Failed to fetch products");
+    }
 
-  const res = await fetch(url, { signal });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
-
-  return res.json();
+    return res.json();
 };
 
 /* ================= APP ================= */
 
 const App: React.FC = () => {
-  const [page, setPage] = useState<number>(1);
-  const queryClient = useQueryClient();
-
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    isFetching,
-  } = useQuery<ProductResponse>({
-    queryKey: ["productdata", page, LIMIT],
-
-    queryFn: ({ signal }) =>
-      fetchProducts(page, LIMIT, signal),
-
-    placeholderData: (prev) => prev,
-
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 5,
-    retry: 1,
-  });
+    const [page, setPage]   = useState<number>(1);
+    const queryClient       = useQueryClient();
+    const { data, isLoading, isError, error, isFetching } = useQuery<ProductResponse>({
+                queryKey: ["productdata", page, LIMIT],
+                queryFn: ({ signal }) => fetchProducts(page, LIMIT, signal),
+                placeholderData: (prev) => prev,
+                staleTime: 1000 * 60 * 2,
+                gcTime: 1000 * 60 * 5,
+                retry: 1,
+                retryDelay: 1000,
+                retryOnMount: false,
+                refetchOnWindowFocus: false,
+                refetchOnReconnect: false,
+            });
 
   /* ================= PREFETCH NEXT PAGE ================= */
 
-  useEffect(() => {
-    if (data && data.page < data.totalPages) {
-      const nextPage = data.page + 1;
+    useEffect(() => {
+        if (data && data.page < data.totalPages) {
+            const nextPage = data.page + 1;
 
-      queryClient.prefetchQuery({
-        queryKey: ["productdata", nextPage, LIMIT],
-        queryFn: ({ signal }) =>
-          fetchProducts(nextPage, LIMIT, signal),
-      });
-    }
-  }, [data, queryClient]);
+            queryClient.prefetchQuery({
+                queryKey: ["productdata", nextPage, LIMIT],
+                queryFn: ({ signal }) => fetchProducts(nextPage, LIMIT, signal),
+                staleTime: 1000 * 60 * 2,
+                gcTime: 1000 * 60 * 5,
+                retry: 1,
+                retryDelay: 1000,
+            });
+        }
+    }, [data, queryClient]);
 
   /* ================= HANDLERS ================= */
 
