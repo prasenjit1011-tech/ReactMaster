@@ -32,10 +32,6 @@ const fetchProducts = async (   page: number,    limit: number,    signal?: Abor
     return res.json();
 };
 
-/* ================= CONSTANTS ================= */
-
-
-
 /* ================= APP ================= */
 
 const App: React.FC = () => {
