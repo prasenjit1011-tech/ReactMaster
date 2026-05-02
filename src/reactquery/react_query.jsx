@@ -14,36 +14,13 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 
-/* ================= TYPES ================= */
-
-interface Product {
-  _id: string;
-  name: string;
-  price: number;
-  stock: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface ProductResponse {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  data: Product[];
-}
-
 /* ================= CONFIG ================= */
 
 const LIMIT = 3;
 
 /* ================= API ================= */
 
-const fetchProducts = async (
-  page: number,
-  limit: number,
-  signal?: AbortSignal
-): Promise<ProductResponse> => {
+const fetchProducts = async (page, limit, signal) => {
   const url = `http://localhost:3000/productlist?page=${page}&limit=${limit}`;
 
   const res = await fetch(url, { signal });
@@ -57,8 +34,8 @@ const fetchProducts = async (
 
 /* ================= APP ================= */
 
-const App: React.FC = () => {
-  const [page, setPage] = useState<number>(1);
+const App = () => {
+  const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
   const {
@@ -67,11 +44,9 @@ const App: React.FC = () => {
     isError,
     error,
     isFetching,
-  } = useQuery<ProductResponse>({
+  } = useQuery({
     queryKey: ["productdata", page, LIMIT],
-
-    queryFn: ({ signal }) =>
-      fetchProducts(page, LIMIT, signal),
+    queryFn: ({ signal }) => fetchProducts(page, LIMIT, signal),
 
     placeholderData: (prev) => prev,
 
@@ -84,15 +59,13 @@ const App: React.FC = () => {
 
   useEffect(() => {
     if (data && data.page < data.totalPages) {
-      const nextPage = data.page + 1;
-
       queryClient.prefetchQuery({
-        queryKey: ["productdata", nextPage, LIMIT],
+        queryKey: ["productdata", page + 1, LIMIT],
         queryFn: ({ signal }) =>
-          fetchProducts(nextPage, LIMIT, signal),
+          fetchProducts(page + 1, LIMIT, signal),
       });
     }
-  }, [data, queryClient]);
+  }, [data, page, queryClient]);
 
   /* ================= HANDLERS ================= */
 
@@ -108,39 +81,28 @@ const App: React.FC = () => {
 
   /* ================= MEMO ================= */
 
-  const products = useMemo<Product[]>(
-    () => data?.data ?? [],
-    [data]
-  );
+  const products = useMemo(() => data?.data ?? [], [data]);
 
-  /* ================= STATES ================= */
+  /* ================= UI STATES ================= */
 
   if (isLoading) {
     return <p>Loading products...</p>;
   }
 
   if (isError) {
-    return (
-      <p>
-        Error: {(error as Error).message}
-      </p>
-    );
+    return <p>Error: {error.message}</p>;
   }
 
   /* ================= UI ================= */
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>
-        Products{" "}
-        {isFetching && (
-          <span style={{ fontSize: 14 }}>
-            (updating...)
-          </span>
-        )}
-      </h2>
+      <h2>Products : {isFetching && <>PreFetching data of page {page}...</>}</h2>
+
+      
 
       <ul>
+        
         {products.map((p) => (
           <li key={p._id}>
             {p.name} — ₹{p.price} (Stock: {p.stock})
@@ -158,8 +120,7 @@ const App: React.FC = () => {
         </button>
 
         <span style={{ margin: "0 10px" }}>
-          Page {data?.page ?? 1} /{" "}
-          {data?.totalPages ?? 1}
+          Page {data?.page ?? 1} / {data?.totalPages ?? 1}
         </span>
 
         <button
@@ -178,12 +139,12 @@ const App: React.FC = () => {
 
 const queryClient = new QueryClient();
 
-/* ================= ROOT (SAFE TS VERSION) ================= */
+/* ================= ROOT (FIXED NULL SAFE) ================= */
 
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
-  throw new Error("Root element not found");
+  throw new Error("Root element (#root) not found in index.html");
 }
 
 ReactDOM.createRoot(rootElement).render(
