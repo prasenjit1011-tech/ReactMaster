@@ -1,18 +1,8 @@
 import ReactDOM from "react-dom/client";
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  useCallback,
-  startTransition,
-} from "react";
+import React, {  useEffect,  useState,  useMemo,  useCallback,  startTransition,  } from "react";
 
-type Todo = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
+type Todo = {  userId: number;  id: number;  title: string;  completed: boolean; };
+
 // const url = "https://jsonplaceholder.typicode.com/todos";
 const url = "http://localhost:3000/api/users";
 
@@ -21,18 +11,11 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [input, setInput] = useState("");
 
-  // 1. Fetch data
-  useEffect(() => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data: Todo[]) => setTodos(data));
-  }, []);
+  useEffect(() => {  fetch(url) .then((res) => res.json())  .then((data: Todo[]) => setTodos(data));  }, []);
 
-  // 2. useMemo → expensive filtering (CACHE RESULT)
+
   const filteredTodos = useMemo(() => {
-    return todos.filter((todo) =>
-      todo.title.toLowerCase().includes(search.toLowerCase())
-    );
+    return todos.filter((todo) => todo.title.toLowerCase().includes(search.toLowerCase()));
   }, [todos, search]);
 
   // 3. useCallback → stable handler reference
@@ -44,9 +27,7 @@ export default function App() {
       setInput(value);
 
       // LOW PRIORITY (React Fiber scheduling)
-      startTransition(() => {
-        setSearch(value);
-      });
+      startTransition(() => {  setSearch(value);  });
     },
     []
   );
@@ -54,38 +35,12 @@ export default function App() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Advanced Production Search (React Fiber + Hooks)</h2>
-
-      {/* Search Input */}
-      <input
-        value={input}
-        onChange={handleChange}
-        placeholder="Search todos..."
-        style={{
-          padding: 10,
-          width: 300,
-          marginBottom: 20,
-        }}
-      />
-
+      <input  value={input}  onChange={handleChange}  placeholder="Search todos..."  style={{  padding: 10,  width: 300,  marginBottom: 20,  }}  />
       <p>Total Results: {filteredTodos.length}</p>
 
-      {/* Render list */}
-      <div
-        style={{
-          height: 400,
-          overflow: "auto",
-          border: "1px solid gray",
-          padding: 10,
-        }}
-      >
+      <div  style={{  height: 400,  overflow: "auto",  border: "1px solid gray",  padding: 10,  }}      >
         {filteredTodos.map((todo, index) => (
-          <div
-            key={index}
-            style={{
-              padding: 6,
-              borderBottom: "1px solid #eee",
-            }}
-          >
+          <div  key={index}  style={{  padding: 6,  borderBottom: "1px solid #eee",  }}  >
             {index + 1}.
             {todo.title}
           </div>
