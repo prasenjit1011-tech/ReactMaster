@@ -30,8 +30,9 @@ const queryClient = new QueryClient();
 const style: Record<string, React.CSSProperties> = {
   parent: { border: "1px solid #F00", padding: 10 },
   child: { border: "1px solid #00F", marginTop: 10 },
-  title: { textAlign: "center" },
-  input: { padding: 5, width: "200px" }
+  title:  { textAlign: "center", backgroundColor: '#0FF' },
+  note:   { textAlign: "center", backgroundColor: '#0FF' },
+  input:  { padding: 5, width: "200px" }
 };
 
 // ============================
@@ -68,15 +69,9 @@ const Row = React.memo(({ index, style, data }: RowProps) => {
   const item = data[index];
 
   return (
-    <div
-      style={{
-        ...style,
-        borderBottom: "1px solid #ccc",
-        padding: "5px"
-      }}
-    >
-      {item?.title}
-    </div>
+    <p style={{ backgroundColor:'#BBB', color:'#FFF', padding:'15px 5px', border:'1px solid #F00'}}>
+      1) {item?.title}
+    </p>
   );
 });
 
