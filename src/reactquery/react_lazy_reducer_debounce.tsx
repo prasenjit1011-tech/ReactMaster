@@ -1,24 +1,24 @@
-import React, {
-    memo,
-  useState,
-  useMemo,
-  useCallback,
-  useEffect,
-  lazy, Suspense,
-  useReducer
-} from "react";
-
 import ReactDOM from "react-dom/client";
-const styles = {main: {padding: '20px',},title: {color: '#5C6AC4'}, btn: {padding: '10px 20px', cursor: 'pointer', backgroundColor: '#1b11a7', color: '#faf2f2f3', marginRight: '20px', cursor:'pointer'}}
+import React, { memo,  useState,  useMemo,  useCallback,  useEffect,  lazy, Suspense,  useReducer   } from "react";
+
+
+const styles = {main: {padding: '20px',},title: {color: '#5C6AC4'}, btn: {padding: '10px 20px', cursor: 'pointer', backgroundColor: '#1b11a7', color: '#faf2f2f3', marginRight: '20px', cursor:'pointer'}, box:{border:'1px solid #1b11a7', margin:'10px', padding:'20px'}, subbox:{borderTop:'1px solid #1b11a7'} }
+const items: string[]   = ["Apple","Mango","Orange","Grape","WaterMelon","Coconut"];
 const url = "https://jsonplaceholder.typicode.com/todos"
+
 let timer = 0, timer2 = 0, timer3 = 0, delay = 2000;
 let obj = {cnt:0}
 
-const Child = React.memo(({onClick}) => {
+
+const Child = React.memo(({onClick, filterData}) => {
     return (
-        <button onClick={onClick} style={styles.btn}>Callback {new Date().toLocaleString()}</button>
+        <div>
+            <p>{JSON.stringify(filterData)}</p>
+            <button onClick={onClick} style={styles.btn}>Callback Fn {new Date().toLocaleString()}</button>
+        </div>
     )
 })
+
 
 const LazyDemo = () => lazy(()=>{
     return (new Promise((fn)=>{
@@ -37,6 +37,7 @@ const App = () => {
     const [LazyComp, loadingLazyComp] = useState(()=>LazyDemo())
     const reloadComp = ()   =>{   loadingLazyComp(()=>LazyDemo())}
 
+    const reducerIncr = () => {    dispatch({type:'incr'}) }
     const [state, dispatch] = useReducer((state, action) => {    
             if(action.type == 'incr'){    
                 return {...state, cnt:state.cnt+1}    
@@ -64,9 +65,6 @@ const App = () => {
     }
 
 
-    const reducerIncr = () => {
-        dispatch({type:'incr'})
-    }
 
     const [todos, setTodos] = useState([])
     const [error, setError] = useState("");
@@ -81,34 +79,27 @@ const App = () => {
             } 
             catch (err) {
                 // Ignore abort error
-                if (err.name !== "AbortError") {
-                    setError(err.message);
-                }
+                if (err.name !== "AbortError") {    setError(err.message);  }
             }
         };
 
         fetchData();
-
-        return () => {
-            ctrl.abort();
-        };
+        return () => {  ctrl.abort();   };
     }, []);
 
 
-    const handleClick = () =>{
-        alert("Callback Clicked")
-    }
+    const [cnt, setCnt] = useState(0);    
+    const filterData    = useMemo(()=>{         if(cnt<5){return items}else{return items[cnt%items.length]}},[cnt])
+    const handleClick   = useCallback(() =>{    setCnt(0);alert("Callback Clicked")    },[])
     //Reducer, debounce, throttle, memo, callback, react.meo, API call
 
 
     return (
-        <div>
-            <h1>Helllo</h1>
-            <button onClick={debounce}      style={styles.btn}  >Debounce {debounceCnt}</button>
-            <button onClick={throttle}      style={styles.btn}  >Throttle {throttleCnt}</button>
-            <button onClick={reducerIncr}   style={styles.btn}  >Increment:{state.cnt}</button>
-            <button onClick={reloadComp}    style={styles.btn}  >Reload Component</button>
-            <Child  onClick={handleClick} />
+        <div style={styles.box}>
+            <button onClick={debounce}      style={styles.btn}  >Debounce : {debounceCnt}</button>
+            <button onClick={throttle}      style={styles.btn}  >Throttle : {throttleCnt}</button>
+            <button onClick={reducerIncr}   style={styles.btn}  >Reducer : {state.cnt}</button>
+            <button onClick={reloadComp}    style={styles.btn}  >Lazy Reload Component</button>
 
             <Suspense fallback={<h1>Loading....</h1>}>
                 <LazyComp str="Demo..." />
@@ -116,11 +107,21 @@ const App = () => {
             <ul>
                 {
                     Array.isArray(todos) && todos.length>0 ? 
-                        todos.map((val, index)=>{
+                        todos.slice(0,2).map((val, index)=>{
                             return <li key={index}>{val?.title}</li>
                         }):<li>No Data</li>
                 }
             </ul>
+
+            <div style={styles.subbox}>
+                <h3>useCallback and useMemo</h3>
+                <p>{JSON.stringify(filterData)}</p>
+                <button onClick={()=>{setCnt(cnt+1)}}      style={styles.btn}  >Counter : {cnt}</button>
+                <Child  onClick={handleClick}   filterData={filterData} />
+                <hr />
+                <p>useMemo and React.memo: memoizes a computed value, recalculating it only when its dependencies change. without this child will be render when parent re-render</p>
+                <p>useCallback : memoizes a function, preventing new function creation on every render unless dependencies change.</p>            
+            </div>
         </div>
     )
 }
