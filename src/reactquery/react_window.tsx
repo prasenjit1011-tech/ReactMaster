@@ -3,6 +3,8 @@ import React, {  memo,  useCallback,  useMemo,  useState,} from "react";
 import { QueryClient,  QueryClientProvider,  useQuery,} from "@tanstack/react-query";
 import { FixedSizeList as List } from "react-window";
 
+// import "../react_window.css";
+
 // ======================================================
 // INSTALL
 // ======================================================
@@ -136,10 +138,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
+
 // ======================================================
 // API FETCH
 // ======================================================
-const url = "https://jsonplaceholder.typicode.com/photos"
+const url     = "https://jsonplaceholder.typicode.com/photos"
+const imgurl  = "https://cdn-icons-png.flaticon.com/512/1674/1674295.png"
 const fetchPhotos = async (  signal?: AbortSignal): Promise<Photo[]> => {
   const response = await fetch(url, { signal });
   
@@ -163,31 +167,15 @@ const usePhotos = () => {
 // ======================================================
 // ROW COMPONENT
 // ======================================================
-type RowProps = {
-  index: number;
-  style: React.CSSProperties;
-  data: Photo[];
-};
-
-const Row = memo(({ index, style, data }: RowProps) => {
+type RowProps = {  index: number;  style: React.CSSProperties;  data: Photo[];  };
+const Row     = memo(({ index, style, data }: RowProps) => {
   const item = data[index];
-
   if (!item) return null;
 
-  return (
-    <div
-      style={{
-        ...style,
-        ...styles.row,
-      }}
-    >
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/1674/1674295.png"
-        alt={item.title}
-        loading="lazy"
-        style={styles.image}
-      />
 
+  return (
+    <div  style={{  ...style,  ...styles.row }}  >
+      <img  src={imgurl}  alt={item.title}  loading="lazy"  style={styles.image}  />
       <div style={styles.rowTitle}>
         <strong>#{item.id}</strong> — {item.title}
       </div>
@@ -208,13 +196,7 @@ const VirtualList = memo(
   ({ items }: VirtualListProps) => {
     return (
       <div style={styles.listContainer}>
-        <List
-          height={600}
-          width={"100%"}
-          itemCount={items.length}
-          itemSize={70}
-          itemData={items}
-        >
+        <List  height={600}  width={"100%"}  itemCount={items.length}  itemSize={70}  itemData={items}  >
           {Row}
         </List>
       </div>
