@@ -20,12 +20,24 @@ const Child = React.memo(({onClick, filterData}) => {
 })
 
 
+// Custom Hook
+const useWindowWidth = () => {
+    const [width, setWidth] = useState(window.innerWidth);
+    useEffect(() => {
+        const resizeFn = () => {    setWidth(window.innerWidth);    };
+        window.addEventListener("resize", resizeFn);
+        return () => {    window.removeEventListener("resize", resizeFn)};
+    }, []);
+
+    return width;
+};
+
 const LazyDemo = () => lazy(()=>{
     return (new Promise((fn)=>{
         setTimeout(()=>{
             return fn({
                 default:({str})=>{
-                    return <h1>{str}</h1>
+                    return <h3>{str}-{new Date().toLocaleString()}</h3>
                 }
             })
         },delay)
@@ -34,6 +46,7 @@ const LazyDemo = () => lazy(()=>{
 
 
 const App = () => {
+    const window_width = useWindowWidth();
     const [LazyComp, loadingLazyComp] = useState(()=>LazyDemo())
     const reloadComp = ()   =>{   loadingLazyComp(()=>LazyDemo())}
 
@@ -100,6 +113,7 @@ const App = () => {
             <button onClick={throttle}      style={styles.btn}  >Throttle : {throttleCnt}</button>
             <button onClick={reducerIncr}   style={styles.btn}  >Reducer : {state.cnt}</button>
             <button onClick={reloadComp}    style={styles.btn}  >Lazy Reload Component</button>
+            <button style={styles.btn}>Custom Hook : Window Width : {window_width}</button>
 
             <Suspense fallback={<h1>Loading....</h1>}>
                 <LazyComp str="Demo..." />
