@@ -17,7 +17,7 @@ type ListProps          = {  items: string[];  callbackFn: (value?: string) => v
 const List = React.memo(({ items, callbackFn }: ListProps) => {
   return (
     <div style={style.child}>
-      <p style={style.title}>React.memo</p>
+      <p style={style.title}>React.memo {new Date().toLocaleString()}</p>
       <button onClick={() => callbackFn()} style={style.btn2}>Clear Search</button>
       <p>Render Time : {new Date().toLocaleTimeString()}</p>
       {items.length > 0 ? (
