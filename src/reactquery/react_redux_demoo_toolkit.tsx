@@ -11,10 +11,12 @@ const counterSlice = createSlice({
   name: "counter",
   initialState: initialStateObj,
   reducers: {
+    updData: (state, action: PayloadAction<{ key: keyof StateType; val: number }>) => {
+      state[action.payload.key] += action.payload.val;
+    },
     count: (state, action: PayloadAction<number>) => {
       state.count += action.payload;
     },
-
     slno: (state, action: PayloadAction<number>) => {
       state.slno += action.payload;
     },
@@ -23,7 +25,6 @@ const counterSlice = createSlice({
 
 // Store
 const store = configureStore({  reducer: counterSlice.reducer });
-
 
 // RootState
 type RootState = ReturnType<typeof store.getState>;
@@ -35,8 +36,11 @@ function Counter() {
 function Buttons() {
   const dispatch = useDispatch();
   return (<>
-      <button  onClick={() =>  dispatch(counterSlice.actions.count(4))  }  > + </button> &nbsp;
-      <button  onClick={() =>  dispatch(counterSlice.actions.slno(3))   }  > + </button>
+      <button  onClick={() =>  dispatch(counterSlice.actions.count(4))  }  >count : + </button> &nbsp;
+      <button  onClick={() =>  dispatch(counterSlice.actions.slno(3))   }  >slno : + </button> &nbsp;
+      
+      <button  onClick={() =>  dispatch(counterSlice.actions.updData({ key: "count", val: 6 }))  }  >updData_count: + </button> &nbsp;
+      <button  onClick={() =>  dispatch(counterSlice.actions.updData({ key: "slno", val: 9 }))  }  >updData_slno: + </button> &nbsp;
     </>
   );
 }
