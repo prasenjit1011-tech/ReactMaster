@@ -23,11 +23,9 @@ const counterSlice = createSlice({
   },
 });
 
-// Store
-const store = configureStore({  reducer: counterSlice.reducer });
-
-// RootState
-type RootState = ReturnType<typeof store.getState>;
+// Store & RootState
+const store     = configureStore({  reducer: counterSlice.reducer });
+type RootState  = ReturnType<typeof store.getState>;
 function Counter() {
   const { count, slno } = useSelector(  (state: RootState) => state  );
   return (  <h2>  Count : {count} / Slno : {slno}  </h2>  );
@@ -38,7 +36,7 @@ function Buttons() {
   return (<>
       <button  onClick={() =>  dispatch(counterSlice.actions.count(4))  }  >count : + </button> &nbsp;
       <button  onClick={() =>  dispatch(counterSlice.actions.slno(3))   }  >slno : + </button> &nbsp;
-      
+
       <button  onClick={() =>  dispatch(counterSlice.actions.updData({ key: "count", val: 6 }))  }  >updData_count: + </button> &nbsp;
       <button  onClick={() =>  dispatch(counterSlice.actions.updData({ key: "slno", val: 9 }))  }  >updData_slno: + </button> &nbsp;
     </>
