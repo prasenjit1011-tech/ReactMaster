@@ -1,7 +1,6 @@
 import ReactDOM from "react-dom/client";
 import React, { memo,  useState,  useMemo,  useCallback,  useEffect,  lazy, Suspense,  useReducer   } from "react";
 
-
 const styles = {main: {padding: '20px',},title: {color: '#5C6AC4'}, btn: {padding: '10px 20px', cursor: 'pointer', backgroundColor: '#1b11a7', color: '#faf2f2f3', marginRight: '20px', cursor:'pointer'}, box:{border:'1px solid #1b11a7', margin:'10px', padding:'20px'}, subbox:{borderTop:'1px solid #1b11a7'} }
 const items: string[]   = ["Apple","Mango","Orange","Grape","WaterMelon","Coconut"];
 const url = "https://jsonplaceholder.typicode.com/todos"
@@ -50,15 +49,18 @@ const App = () => {
     const [LazyComp, loadingLazyComp] = useState(()=>LazyDemo())
     const reloadComp = ()   =>{   loadingLazyComp(()=>LazyDemo())}
 
-    const reducerIncr = () => {    dispatch({type:'incr'}) }
-    const [state, dispatch] = useReducer((state, action) => {    
-            if(action.type == 'incr'){    
-                return {...state, cnt:state.cnt+1}    
-            }
-            else{    
-                return state    
-            }    
-        },  obj)
+    const reducerIncr = () =>   { dispatch({type:'incr'}) }
+    const [state, dispatch]     = useReducer((state, action) => {    
+                if(action.type == 'incr'){
+                    return {...state, cnt:state.cnt+1}
+                }
+                return state                    
+            },  {cnt:0})
+
+    const [mystate, mydispatch] = useReducer((newstate, newaction)=>{
+        newstate[newaction.name] = newaction.val
+        return {...newstate};
+    },{fname:'Rohit', mobile:'456789'})
 
 
     const [debounceCnt, setDebounceCnt] = useState(0)
@@ -106,18 +108,28 @@ const App = () => {
     const handleClick   = useCallback(() =>{    setCnt(0);alert("Callback Clicked")    },[])
     //Reducer, debounce, throttle, memo, callback, react.meo, API call
 
+    
 
     return (
         <div style={styles.box}>
             <button onClick={debounce}      style={styles.btn}  >Debounce : {debounceCnt}</button>
             <button onClick={throttle}      style={styles.btn}  >Throttle : {throttleCnt}</button>
-            <button onClick={reducerIncr}   style={styles.btn}  >Reducer : {state.cnt}</button>
+            <button onClick={reducerIncr}   style={styles.btn}  >useReducer : {state.cnt}</button>
             <button onClick={reloadComp}    style={styles.btn}  >Lazy Reload Component</button>
             <button style={styles.btn}>Custom Hook : Window Width : {window_width}</button>
 
-            <Suspense fallback={<h1>Loading....</h1>}>
-                <LazyComp str="Demo..." />
+            <Suspense fallback={<h1>Lazy Loading....</h1>}>
+                <LazyComp str="Lazy Demooooo..." />
             </Suspense>
+            <hr />
+            <div>
+                useReducer : 
+                <input type="text" name="fname" value={mystate.fname} 
+                    onChange={(e)=>{mydispatch({name:'fname', val:e.target.value})}} /> &nbsp;
+                <input type="text" name="mobile" value={mystate.mobile} 
+                    onChange={(e)=>{mydispatch({name:'mobile', val:e.target.value})}} />
+            </div>
+            <hr />
             <ul>
                 {
                     Array.isArray(todos) && todos.length>0 ? 
