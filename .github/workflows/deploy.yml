@@ -2,7 +2,8 @@ name: Deploy React App to AWS Amplify
 
 on:
   push:
-    branches: [amplify_main]
+    branches:
+      - amplify_main
 
 permissions:
   contents: read
@@ -28,7 +29,13 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: us-east-1
+
+      - name: Verify Required Secrets
+        run: |
+          echo "GH_TOKEN configured: ${{ secrets.GH_TOKEN != '' }}"
+          echo "AWS_ACCESS_KEY_ID configured: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}"
+          echo "AWS_SECRET_ACCESS_KEY configured: ${{ secrets.AWS_SECRET_ACCESS_KEY != '' }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
