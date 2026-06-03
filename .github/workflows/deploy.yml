@@ -36,7 +36,7 @@ jobs:
 
 
       - name: Print AWS Region Testing
-        run: echo "AWS_REGION=${{ vars.AWS_REGION }}"
+        run: echo "AWS_REGION=${{ secrets.AWS_REGION }}"
 
       - name: Validate Secrets
         run: |
