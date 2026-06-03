@@ -30,7 +30,13 @@ jobs:
           test -n "${{ secrets.AWS_ROLE_ARN }}" || (echo "AWS_ROLE_ARN missing" && exit 1)
           test -n "${{ secrets.AWS_REGION }}" || (echo "AWS_REGION missing" && exit 1)
 
+      - name: Debug Context
+        run: |
+          echo "Repository: $GITHUB_REPOSITORY"
+          echo "Ref: $GITHUB_REF"
+
       - name: Configure AWS Credentials (OIDC)
+        timeout-minutes: 2
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
