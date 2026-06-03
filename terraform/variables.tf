@@ -1,8 +1,8 @@
-variable "github_token" {
-  description = "GitHub Personal Access Token used by AWS Amplify"
-  type        = string
-  sensitive   = true
-}
+# variable "github_token" {
+#   description = "GitHub Personal Access Token used by AWS Amplify"
+#   type        = string
+#   sensitive   = true
+# }
 
 variable "app_name" {
   description = "Amplify application name"
