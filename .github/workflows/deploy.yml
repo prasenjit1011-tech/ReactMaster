@@ -30,6 +30,15 @@ jobs:
           test -n "${{ secrets.AWS_ROLE_ARN }}" || (echo "AWS_ROLE_ARN missing" && exit 1)
           test -n "${{ secrets.AWS_REGION }}" || (echo "AWS_REGION missing" && exit 1)
 
+      - name: Verify GH_TOKEN exists
+        run: |
+          if [ -z "$TF_VAR_github_token" ]; then
+            echo "GH_TOKEN is empty"
+            exit 1
+          fi
+          echo "GH_TOKEN is present"
+
+
       - name: Debug Context
         run: |
           echo "Repository: $GITHUB_REPOSITORY"
