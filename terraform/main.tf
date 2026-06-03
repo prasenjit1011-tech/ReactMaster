@@ -13,6 +13,27 @@ provider "aws" {
   region = var.aws_region
 }
 
+variable "github_token" {
+  type      = string
+  sensitive = true
+}
+
+variable "app_name" {
+  type = string
+}
+
+variable "repository_url" {
+  type = string
+}
+
+variable "branch_name" {
+  type = string
+}
+
+variable "aws_region" {
+  type = string
+}
+
 resource "aws_amplify_app" "react_app" {
   name         = var.app_name
   repository   = var.repository_url
@@ -36,9 +57,6 @@ frontend:
     baseDirectory: dist
     files:
       - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
 EOF
 }
 
@@ -57,4 +75,8 @@ output "amplify_app_id" {
 
 output "amplify_default_domain" {
   value = aws_amplify_app.react_app.default_domain
+}
+
+output "amplify_url" {
+  value = "https://${aws_amplify_branch.main.branch_name}.${aws_amplify_app.react_app.default_domain}"
 }
