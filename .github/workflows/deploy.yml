@@ -85,3 +85,46 @@ jobs:
         run: |
           echo "Amplify URL:"
           terraform output -raw amplify_url || true
+
+      - name: Check Amplify Branch
+        run: |
+          aws amplify get-branch \
+            --app-id $(terraform output -raw amplify_app_id) \
+            --branch-name amplify_main \
+            --region ${{ secrets.AWS_REGION }}
+
+      - name: Check Amplify Jobs
+        run: |
+          aws amplify list-jobs \
+            --app-id $(terraform output -raw amplify_app_id) \
+            --branch-name amplify_main \
+            --region ${{ secrets.AWS_REGION }}
+
+      - name: Check Amplify Branch
+        run: |
+          APP_ID=$(terraform output -raw amplify_app_id)
+          BRANCH=$(terraform output -raw amplify_branch_name)
+
+          aws amplify get-branch \
+            --app-id "$APP_ID" \
+            --branch-name "$BRANCH" \
+            --region ${{ secrets.AWS_REGION }}
+
+      - name: Check Amplify Jobs
+        run: |
+          APP_ID=$(terraform output -raw amplify_app_id)
+          BRANCH=$(terraform output -raw amplify_branch_name)
+
+          aws amplify list-jobs \
+            --app-id "$APP_ID" \
+            --branch-name "$BRANCH" \
+            --region ${{ secrets.AWS_REGION }}
+
+
+      - name: Show Terraform Outputs
+        run: terraform output
+
+      - name: Show Amplify URL
+        run: |
+          echo "Amplify URL:"
+          terraform output -raw amplify_url || true
