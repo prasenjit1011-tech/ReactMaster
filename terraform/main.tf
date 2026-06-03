@@ -1,6 +1,7 @@
 resource "aws_amplify_app" "react_app" {
   name       = var.app_name
   repository = var.repository_url
+  access_token = var.github_token
 
   platform = "WEB"
 

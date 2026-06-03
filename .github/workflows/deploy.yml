@@ -14,6 +14,9 @@ jobs:
     name: Terraform Deploy
     runs-on: ubuntu-latest
 
+    env:
+      TF_VAR_github_token: ${{ secrets.GH_TOKEN }}
+
     defaults:
       run:
         working-directory: terraform
