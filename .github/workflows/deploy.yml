@@ -38,6 +38,13 @@ jobs:
       - name: Print AWS Region Testing
         run: echo "AWS_REGION=${{ secrets.AWS_REGION }}"
 
+      - name: Show AWS CLI Region
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          echo "Region length: ${#AWS_REGION}"
+
+
       - name: Validate Secrets
         run: |
           test -n "${{ secrets.AWS_ACCESS_KEY_ID }}" || (echo "AWS_ACCESS_KEY_ID missing" && exit 1)
