@@ -33,7 +33,6 @@ variable "branch_name" {
 variable "aws_region" {
   type = string
 }
-
 resource "aws_amplify_app" "react_app" {
   name         = var.app_name
   repository   = var.repository_url
@@ -57,7 +56,17 @@ frontend:
     baseDirectory: dist
     files:
       - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
 EOF
+
+  # React Router / SPA rewrite rule
+  custom_rule {
+    source = "/<*>"
+    target = "/index.html"
+    status = "200"
+  }
 }
 
 resource "aws_amplify_branch" "main" {
