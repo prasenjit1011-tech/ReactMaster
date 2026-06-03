@@ -6,6 +6,7 @@ on:
       - amplify_main
 
 permissions:
+  id-token: write
   contents: read
 
 jobs:
@@ -24,63 +25,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Check Secrets VAlue
+      - name: Validate Required Secrets
         run: |
-          echo "AWS_ACCESS_KEY_ID exists: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}"
-          echo "AWS_SECRET_ACCESS_KEY exists: ${{ secrets.AWS_SECRET_ACCESS_KEY != '' }}"
-          echo "GH_TOKEN exists: ${{ secrets.GH_TOKEN != '' }}"
-
-      - name: Validate AWS_REGION
-        run: |
+          test -n "${{ secrets.AWS_ROLE_ARN }}" || (echo "AWS_ROLE_ARN missing" && exit 1)
           test -n "${{ secrets.AWS_REGION }}" || (echo "AWS_REGION missing" && exit 1)
-
-
-      - name: Print AWS Region Testing
-        run: echo "AWS_REGION=${{ secrets.AWS_REGION }}"
-
-      - name: Show AWS CLI Region
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          echo "Region length: ${#AWS_REGION}"
-          echo "AWS_REGION=${{ vars.AWS_REGION }}"
-
-
-
-      - name: Validate Secrets
-        run: |
-          test -n "${{ secrets.AWS_ACCESS_KEY_ID }}" || (echo "AWS_ACCESS_KEY_ID missing" && exit 1)
-          test -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" || (echo "AWS_SECRET_ACCESS_KEY missing" && exit 1)
           test -n "${{ secrets.GH_TOKEN }}" || (echo "GH_TOKEN missing" && exit 1)
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Verify Secrets
-        run: |
-          if [ -z "${{ secrets.AWS_ACCESS_KEY_ID }}" ]; then
-            echo "AWS_ACCESS_KEY_ID missing"
-            exit 1
-          fi
-
-          if [ -z "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]; then
-            echo "AWS_SECRET_ACCESS_KEY missing"
-            exit 1
-          fi
-
-
-      - name: Verify AWS
+      - name: Verify AWS Identity
         run: aws sts get-caller-identity
-
-      - name: Verify Required Secrets
-        run: |
-          echo "GH_TOKEN configured: ${{ secrets.GH_TOKEN != '' }}"
-          echo "AWS_ACCESS_KEY_ID configured: ${{ secrets.AWS_ACCESS_KEY_ID != '' }}"
-          echo "AWS_SECRET_ACCESS_KEY configured: ${{ secrets.AWS_SECRET_ACCESS_KEY != '' }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -106,4 +64,4 @@ jobs:
       - name: Show Amplify URL
         run: |
           echo "Amplify URL:"
-          terraform output amplify_url
+          terraform output -raw amplify_url || true

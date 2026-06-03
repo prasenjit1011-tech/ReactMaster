@@ -13,7 +13,7 @@ variable "app_name" {
 variable "repository_url" {
   description = "GitHub repository URL"
   type        = string
-  default     = "https://github.com/prasenjit1011/ReactMaster"
+  default     = "https://github.com/prasenjit1011-tech/ReactMaster"
 }
 
 variable "branch_name" {

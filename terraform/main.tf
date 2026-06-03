@@ -1,6 +1,6 @@
 resource "aws_amplify_app" "react_app" {
   name         = "reactmaster"
-  repository   = "https://github.com/prasenjit1011/ReactMaster"
+  repository   = "https://github.com/prasenjit1011-tech/ReactMaster"
   access_token = var.github_token
 
   platform = "WEB"
