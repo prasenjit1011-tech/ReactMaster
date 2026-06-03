@@ -35,7 +35,7 @@ jobs:
           test -n "${{ secrets.AWS_REGION }}" || (echo "AWS_REGION missing" && exit 1)
 
 
-      - name: Print AWS Region Test
+      - name: Print AWS Region Testing
         run: echo "AWS_REGION=${{ vars.AWS_REGION }}"
 
       - name: Validate Secrets
