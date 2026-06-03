@@ -18,7 +18,7 @@ frontend:
   artifacts:
     baseDirectory: dist
     files:
-      - '**/*'
+      - "**/*"
   cache:
     paths:
       - node_modules/**/*
@@ -31,7 +31,7 @@ resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.react_app.id
   branch_name = var.branch_name
 
-  framework        = "React"
-  stage            = "PRODUCTION"
+  framework         = "React"
+  stage             = "PRODUCTION"
   enable_auto_build = true
 }
