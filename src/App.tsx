@@ -16,18 +16,19 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React App</h1>
+<h3>Portfolio Site</h3>
+<p>This is a portfolio site built using React and hosted on AWS Amplify. It showcases various projects and skills, demonstrating proficiency in frontend development and cloud hosting.</p>
+<p>**Frontend:** React application hosted on AWS Amplify.</p>
+<p>**Backend:** Serverless architecture powered by AWS Lambda and AWS Step Functions, providing scalable API processing and workflow orchestration.</p>
+
+
+
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        <button onClick={() => window.open('https://prasenjit1011.netlify.app/', '_blank')} style={{ color:'blue', border: '1px solid blue',
+          backgroundColor: 'white',padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>
+          Go To Portfolio Page
+        </button>        
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
