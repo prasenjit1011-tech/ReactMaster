@@ -13,6 +13,9 @@ provider "aws" {
   region = var.aws_region
 }
 
+# ----------------------------
+# Variables
+# ----------------------------
 variable "github_token" {
   type      = string
   sensitive = true
@@ -33,46 +36,40 @@ variable "branch_name" {
 variable "aws_region" {
   type = string
 }
-resource "aws_amplify_app" "react_app" {
-  name         = var.app_name
-  repository   = var.repository_url
-  access_token = var.github_token
-  platform = "WEB"
-  
-  enable_auto_branch_creation = true
-  enable_branch_auto_build    = true  
 
+# ----------------------------
+# Amplify App
+# ----------------------------
+resource "aws_amplify_app" "react_app" {
+  name       = var.app_name
+  repository = var.repository_url
+  platform   = "WEB"
+
+  # ⚠️ Production CI/CD
+  access_token                = var.github_token
+  enable_auto_branch_creation = true
+  enable_branch_auto_build    = true
+
+  # Build spec (you already added amplify.yml)
   build_spec = file("${path.module}/amplify.yml")
 
-#   build_spec = <<EOF
-# version: 1
-# frontend:
-#   phases:
-#     preBuild:
-#       commands:
-#         - npm ci
-#     build:
-#       commands:
-#         - npm run build
-#   artifacts:
-#     baseDirectory: dist
-#     files:
-#       - '**/*'
-#   cache:
-#     paths:
-#       - node_modules/**/*
-# EOF
-
-  # React Router / SPA rewrite rule
+  # SPA fallback routing (FIXED & SAFE)
   custom_rule {
-    # source = "/<*>"
-    # source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map)$)([^.]+$)/>"
     source = "/*"
     target = "/index.html"
     status = "200"
   }
+
+  lifecycle {
+    ignore_changes = [
+      build_spec
+    ]
+  }
 }
 
+# ----------------------------
+# Branch
+# ----------------------------
 resource "aws_amplify_branch" "main" {
   app_id      = aws_amplify_app.react_app.id
   branch_name = var.branch_name
@@ -80,8 +77,17 @@ resource "aws_amplify_branch" "main" {
   framework         = "React"
   stage             = "PRODUCTION"
   enable_auto_build = true
+
+  lifecycle {
+    ignore_changes = [
+      stage
+    ]
+  }
 }
 
+# ----------------------------
+# Outputs
+# ----------------------------
 output "amplify_app_id" {
   value = aws_amplify_app.react_app.id
 }
