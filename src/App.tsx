@@ -96,16 +96,19 @@ function App() {
   <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
 
     {/* Frontend */}
-<div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-    <div className="flex items-center gap-3 mb-5">
-      <span className="text-3xl">🎨</span>
-      <h3 className="font-bold text-xl text-cyan-400">
-        Frontend
-      </h3>
-    </div>
 
 
-    <ul className="space-y-2  text-cyan-400">
+    {/* Backend */}
+    <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 rounded-2xl p-6 hover-card">
+
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-3xl">🎨</span>
+        <h3 className="font-bold text-xl text-cyan-400">
+          Frontend
+        </h3>
+      </div>
+
+    <ul className="space-y-2   text-cyan-400">
       <li>React.js</li>
       <li>Next.js</li>
       <li>Redux</li>
@@ -115,7 +118,15 @@ function App() {
       <li>CSS3</li>
       <li>Bootstrap</li>
     </ul>
-  </div>
+
+    </div>
+
+
+
+
+
+
+
 
     {/* Backend */}
     <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 rounded-2xl p-6 hover-card">
