@@ -16,7 +16,7 @@ function App() {
           </p>
 
           <p className="mt-6 max-w-4xl mx-auto text-slate-300">
-            10+ years of experience in website development, scalable web
+            15+ years of experience in website development, scalable web
             applications, REST APIs, cloud-native deployments, fintech,
             healthcare, SaaS and e-commerce.
           </p>
@@ -43,9 +43,35 @@ function App() {
         </section>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-4 mb-10">
+        
+
+        
+
+        {/* Skills */}
+
+
+<section className="glass rounded-3xl p-8 md:p-10 mb-8 hover-card">
+
+  {/* Header */}
+  <div className="flex items-center gap-4 mb-10">
+    <div className="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-3xl">
+      ⚡
+    </div>
+
+    <div>
+      <h2 className="text-4xl font-bold">
+        Technical Skills
+      </h2>
+      <p className="text-slate-400">
+        Full Stack Development, Cloud Engineering & Enterprise Solutions
+      </p>
+    </div>
+  </div>
+
+  {/* Quick Stats */}
+  <div className="grid md:grid-cols-4 gap-4 mb-10">
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-            <h3 className="text-3xl font-bold text-cyan-400">10+</h3>
+            <h3 className="text-3xl font-bold text-cyan-400">15+</h3>
             <p>Years Experience</p>
           </div>
 
@@ -65,72 +91,155 @@ function App() {
           </div>
         </div>
 
-        {/* Contact */}
-        <section className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4">Contact</h2>
+  {/* Skill Categories */}
+  <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-6">
 
-          <div className="space-y-2 text-slate-300">
-            <p>📧 prasenjit10112@gmail.com</p>
-            <p>📱 90514-95239</p>
-            <p>📍 Kolkata, India (Open to Relocate)</p>
+    {/* Frontend */}
+<div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
+    <div className="flex items-center gap-3 mb-5">
+      <span className="text-3xl">🎨</span>
+      <h3 className="font-bold text-xl text-cyan-400">
+        Frontend
+      </h3>
+    </div>
 
-            <a
-              href="https://prasenjit1011.netlify.app"
-              className="block text-cyan-400"
-            >
-              Portfolio Website
-            </a>
-          </div>
-        </section>
 
-        {/* Skills */}
-        <section className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-6">Technical Skills</h2>
+    <ul className="space-y-2  text-cyan-400">
+      <li>React.js</li>
+      <li>Next.js</li>
+      <li>Redux</li>
+      <li>TypeScript</li>
+      <li>JavaScript</li>
+      <li>HTML5</li>
+      <li>CSS3</li>
+      <li>Bootstrap</li>
+    </ul>
+  </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <h3 className="font-bold text-cyan-400 mb-3">Frontend</h3>
-              <ul className="space-y-2">
-                <li>React.js</li>
-                <li>Next.js</li>
-                <li>Redux</li>
-                <li>TypeScript</li>
-                <li>Bootstrap</li>
-              </ul>
-            </div>
+    {/* Backend */}
+    <div className="bg-gradient-to-br from-emerald-500/10 to-slate-900 border border-emerald-500/20 rounded-2xl p-6 hover-card">
 
-            <div>
-              <h3 className="font-bold text-cyan-400 mb-3">Backend</h3>
-              <ul className="space-y-2">
-                <li>Node.js</li>
-                <li>Express.js</li>
-                <li>NestJS</li>
-                <li>FastAPI</li>
-                <li>Laravel</li>
-              </ul>
-            </div>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-3xl">⚙️</span>
+        <h3 className="font-bold text-xl text-emerald-400">
+          Backend
+        </h3>
+      </div>
 
-            <div>
-              <h3 className="font-bold text-cyan-400 mb-3">Database</h3>
-              <ul className="space-y-2">
-                <li>PostgreSQL</li>
-                <li>MySQL</li>
-                <li>MongoDB</li>
-                <li>Prisma ORM</li>
-              </ul>
-            </div>
+    <ul className="space-y-2 text-emerald-300">
+      <li>Node.js</li>
+      <li>Express.js</li>
+      <li>NestJS</li>
+      <li>FastAPI</li>
+      <li>Laravel</li>
+      <li>REST APIs</li>
+    </ul>
 
-            <div>
-              <h3 className="font-bold text-cyan-400 mb-3">Security</h3>
-              <ul className="space-y-2">
-                <li>JWT</li>
-                <li>OAuth 2.0</li>
-                <li>REST APIs</li>
-                <li>RBAC</li>
-              </ul>
-            </div>
-          </div>
-        </section>
+    </div>
+
+ 
+
+
+
+    {/* Database */}
+    <div className="bg-gradient-to-br from-orange-500/10 to-slate-900 border border-orange-500/20 rounded-2xl p-6 hover-card">
+
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-3xl">🗄️</span>
+        <h3 className="font-bold text-xl text-orange-400">
+          Database
+        </h3>
+      </div>
+
+      
+      <ul className="space-y-2 text-orange-400">
+        {[
+          "PostgreSQL",
+          "MySQL",
+          "MongoDB",
+          "Redis",
+          "Prisma ORM",
+        ].map((skill) => (
+          <li
+            key={skill}
+            className="px-3 py-1 rounded-full text-sm text-orange-300"
+          >
+            {skill}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+
+    {/* Security */}
+    <div className="bg-gradient-to-br from-purple-500/10 to-slate-900 border border-purple-500/20 rounded-2xl p-6 hover-card">
+
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-3xl">🔒</span>
+        <h3 className="font-bold text-xl text-purple-400">
+          Security
+        </h3>
+      </div>
+
+      <ul className="space-y-2 text-purple-400">
+        {[
+          "JWT",
+          "OAuth 2.0",
+          "RBAC",
+          "Authentication",
+          "Authorization",
+          "API Security",
+        ].map((skill) => (
+          <li
+            key={skill}
+            className="px-3 py-1 rounded-full text-sm text-purple-300"
+          >
+            {skill}
+          </li>
+        ))}
+      </ul>
+
+    </div>
+
+  </div>
+
+  {/* Additional Skills */}
+  <div className="mt-10 pt-8 border-t border-slate-800">
+
+    <h3 className="text-xl font-semibold mb-5 text-cyan-400">
+      Additional Expertise
+    </h3>
+
+    <div className="flex flex-wrap gap-3">
+      {[
+        "AWS",
+        "Terraform",
+        "GitHub Actions",
+        "CI/CD",
+        "Docker",
+        "System Design",
+        "Microservices",
+        "Kafka",
+        "Redis",
+        "Event-Driven Architecture",
+        "AI Tools",
+        "GitHub Copilot",
+        "Claude AI",
+        "Cursor AI",
+      ].map((skill) => (
+        <span
+          key={skill}
+          className="px-4 py-2 rounded-full bg-slate-800 border border-slate-700 text-slate-300 hover:border-cyan-500 hover:text-cyan-400 transition"
+        >
+          {skill}
+        </span>
+      ))}
+    </div>
+
+  </div>
+
+</section>
+
 
         {/* Cloud */}
         <section className="glass rounded-3xl p-8 md:p-10 mb-8 hover-card">
@@ -380,7 +489,23 @@ function App() {
             </div>
           </div>
         </section>
+{/* Contact */}
+        <section className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
+          <h2 className="text-3xl font-bold mb-4">Contact</h2>
 
+          <div className="space-y-2 text-slate-300">
+            <p>📧 prasenjit10112@gmail.com</p>
+            <p>📱 90514-95239</p>
+            <p>📍 Kolkata, India (Open to Relocate)</p>
+
+            <a
+              href="https://prasenjit1011.netlify.app"
+              className="block text-cyan-400"
+            >
+              Portfolio Website
+            </a>
+          </div>
+        </section>
         <footer className="text-center py-10 text-slate-400">
           © 2026 Prasenjit Aluni
         </footer>
