@@ -37,33 +37,37 @@ resource "aws_amplify_app" "react_app" {
   name         = var.app_name
   repository   = var.repository_url
   access_token = var.github_token
-
   platform = "WEB"
+  
+  enable_auto_branch_creation = true
+  enable_branch_auto_build    = true  
 
-  enable_branch_auto_build = true
+  build_spec = file("${path.module}/amplify.yml")
 
-  build_spec = <<EOF
-version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - npm ci
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: dist
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
-EOF
+#   build_spec = <<EOF
+# version: 1
+# frontend:
+#   phases:
+#     preBuild:
+#       commands:
+#         - npm ci
+#     build:
+#       commands:
+#         - npm run build
+#   artifacts:
+#     baseDirectory: dist
+#     files:
+#       - '**/*'
+#   cache:
+#     paths:
+#       - node_modules/**/*
+# EOF
 
   # React Router / SPA rewrite rule
   custom_rule {
-    source = "/<*>"
+    # source = "/<*>"
+    # source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|woff2|ttf|map)$)([^.]+$)/>"
+    source = "/*"
     target = "/index.html"
     status = "200"
   }
