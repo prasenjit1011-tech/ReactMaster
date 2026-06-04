@@ -17,7 +17,6 @@ function App(): JSX.Element {
             <BtnHook />
             <ApiHook />
             <TodoListApp />
-            <
           </div>
           <div className="right">
             <BtnRedux />
@@ -27,7 +26,6 @@ function App(): JSX.Element {
             <ProductComponent />
           </div>
       </div>
-      
     </div>
   );
 }

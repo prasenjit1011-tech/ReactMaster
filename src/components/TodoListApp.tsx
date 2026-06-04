@@ -5,9 +5,11 @@ const TodoListApp = () => {
   const [todoList, setTodoList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const url = "https://jsonplaceholder.typicode.com/todos";
+  const url2 = "https://jsonplaceholder.typicode.com/posts";
 
   useEffect(() => {
-    if (count % 2 !== 0) return;
+    // if (count % 2 !== 0) return;
 
     const controller = new AbortController();
 
@@ -73,7 +75,7 @@ const TodoListApp = () => {
               textAlign: "left",
             }}
           >
-            {todo.title}
+            {todo.title.slice(0, 10)}
           </li>
         ))}
       </ul>
