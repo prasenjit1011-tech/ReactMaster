@@ -1,4 +1,5 @@
 import "./App.css";
+import Portfolio from "./Portfolio";
 
 function App() {
   return (
@@ -416,6 +417,7 @@ function App() {
 
 </section>
 
+<Portfolio />
         {/* Projects */}
         <section className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
           <h2 className="text-3xl font-bold mb-6">
