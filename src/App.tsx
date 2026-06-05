@@ -6,17 +6,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-7xl mx-auto p-6">
-
-        {/* Hero */}
         <About />
-
-        {/* Stats */}
-        
-
-        
-
-        {/* Skills */}
-
 
 <section className="glass rounded-3xl p-8 md:p-10 mb-8 hover-card">
 
