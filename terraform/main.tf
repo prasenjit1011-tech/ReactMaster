@@ -44,7 +44,7 @@ resource "google_project_iam_member" "artifact_writer" {
 # Artifact Registry (Docker Repo)
 # -----------------------------
 resource "google_artifact_registry_repository" "docker_repo" {
-  project       = "terraform-497011"
+  project       = var.project_id
   location      = "asia-south1"
   repository_id = "react-app"
   description   = "Docker repo for React app"
@@ -94,4 +94,15 @@ resource "google_cloud_run_v2_service_iam_member" "public" {
 
   role   = "roles/run.invoker"
   member = "allUsers"
+}
+
+resource "google_artifact_registry_repository" "docker_repo" {
+  project       = var.project_id
+  location      = "asia-south1"
+  repository_id = "react-app"
+  format        = "DOCKER"
+
+  depends_on = [
+    google_project_service.artifact_registry_api
+  ]
 }
