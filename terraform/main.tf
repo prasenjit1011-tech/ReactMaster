@@ -12,19 +12,60 @@ provider "google" {
   region  = "asia-south1"
 }
 
-resource "google_project_service" "services" {
-  for_each = toset([
-    "run.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "iam.googleapis.com"
-  ])
+# Sugesion
 
-  project = "terraform-497011"
-  service = each.value
 
-  disable_on_destroy = false
+
+resource "google_cloud_run_v2_service" "app" {
+  project  = "terraform-497011"
+  name     = "react-cloudrun"
+  location = "asia-south1"
+
+  template {
+    service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+
+    containers {
+      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
+
+      ports {
+        container_port = 80
+      }
+    }
+  }
+
+  traffic {
+    percent = 100
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+  }
+
+  depends_on = [
+    google_project_iam_member.artifact_writer
+  ]
 }
+
+
+
+
+
+
+
+
+
+
+
+# resource "google_project_service" "services" {
+#   for_each = toset([
+#     "run.googleapis.com",
+#     "artifactregistry.googleapis.com",
+#     "cloudbuild.googleapis.com",
+#     "iam.googleapis.com"
+#   ])
+
+#   project = "terraform-497011"
+#   service = each.value
+
+#   disable_on_destroy = false
+# }
 
 # -----------------------------
 # Enable APIs
@@ -51,12 +92,17 @@ resource "google_project_service" "services" {
 resource "google_project_iam_member" "artifact_writer" {
   project = "terraform-497011"
   role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${"cloudrun-sa@terraform-497011.iam.gserviceaccount.com"}"
-
-  # depends_on = [
-  #   google_service_account.cloudrun_sa
-  # ]
+  member  = "serviceAccount:cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
 }
+# resource "google_project_iam_member" "artifact_writer" {
+#   project = "terraform-497011"
+#   role    = "roles/artifactregistry.writer"
+#   member  = "serviceAccount:${"cloudrun-sa@terraform-497011.iam.gserviceaccount.com"}"
+
+#   # depends_on = [
+#   #   google_service_account.cloudrun_sa
+#   # ]
+# }
 
 
 # resource "google_project_service" "iam_api" {
@@ -81,38 +127,38 @@ resource "google_project_iam_member" "artifact_writer" {
 # -----------------------------
 # Cloud Run Service (v2)
 # -----------------------------
-resource "google_cloud_run_v2_service" "app" {
-  project  = "terraform-497011"
-  name     = "react-cloudrun"
-  location = "asia-south1"
+# resource "google_cloud_run_v2_service" "app" {
+#   project  = "terraform-497011"
+#   name     = "react-cloudrun"
+#   location = "asia-south1"
 
-  template {
-    service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+#   template {
+#     service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
 
-    containers {
-      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
+#     containers {
+#       image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
 
-      ports {
-        container_port = 80
-      }
-    }
-  }
+#       ports {
+#         container_port = 80
+#       }
+#     }
+#   }
 
-  traffic {
-    percent = 100
-    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
-  }
+#   traffic {
+#     percent = 100
+#     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
+#   }
 
-  depends_on = [
-    # google_service_account.cloudrun_sa,
-    google_project_iam_member.artifact_writer
-  ]
+#   depends_on = [
+#     # google_service_account.cloudrun_sa,
+#     google_project_iam_member.artifact_writer
+#   ]
 
-  # depends_on = [
-  #   google_artifact_registry_repository.docker_repo,
-  #   google_project_service.run_api
-  # ]
-}
+#   # depends_on = [
+#   #   google_artifact_registry_repository.docker_repo,
+#   #   google_project_service.run_api
+#   # ]
+# }
 
 # -----------------------------
 # Public Access (Cloud Run Invoker)
