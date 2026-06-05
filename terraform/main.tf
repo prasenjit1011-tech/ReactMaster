@@ -12,6 +12,20 @@ provider "google" {
   region  = "asia-south1"
 }
 
+resource "google_project_service" "services" {
+  for_each = toset([
+    "run.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "iam.googleapis.com"
+  ])
+
+  project = "terraform-497011"
+  service = each.value
+
+  disable_on_destroy = false
+}
+
 # -----------------------------
 # Enable APIs
 # -----------------------------
