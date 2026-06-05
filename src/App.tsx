@@ -24,15 +24,6 @@ function App() {
 
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             <a
-              href="https://prasenjit1011.netlify.app/"
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3 bg-cyan-500 rounded-lg font-semibold hover:bg-cyan-600 transition"
-            >
-              Portfolio
-            </a>
-
-            <a
               href="https://github.com/prasenjit1011"
               target="_blank"
               rel="noreferrer"
@@ -40,6 +31,15 @@ function App() {
             >
               GitHub
             </a>
+
+            <a
+              href="https://prasenjit1011.netlify.app/"
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-3 bg-cyan-500 rounded-lg font-semibold hover:bg-cyan-600 transition"
+            >
+              Portfolio
+            </a>            
           </div>
         </section>
 
@@ -104,7 +104,7 @@ function App() {
       <div className="flex items-center gap-3 mb-5">
         <span className="text-3xl">🎨</span>
         <h3 className="font-bold text-xl text-cyan-400">
-          Frontend Technologies
+          Frontend
         </h3>
       </div>
 
