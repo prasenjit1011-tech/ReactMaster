@@ -12,6 +12,7 @@ jobs:
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       REGION: asia-south1
+      IMAGE: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react-app/react-app
 
     steps:
       - name: Checkout
@@ -22,6 +23,20 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker auth
+        run: gcloud auth configure-docker asia-south1-docker.pkg.dev
+
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE:${{ github.sha }} .
+
+      - name: Push image
+        run: |
+          docker push $IMAGE:${{ github.sha }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
@@ -29,24 +44,10 @@ jobs:
         working-directory: terraform
         run: terraform init
 
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Configure Docker auth
-        run: gcloud auth configure-docker
-
-      - name: Build Docker image
-        run: |
-          docker build -t gcr.io/$PROJECT_ID/react-app:${{ github.sha }} .
-
-      - name: Push image
-        run: |
-          docker push gcr.io/$PROJECT_ID/react-app:${{ github.sha }}
-
       - name: Terraform Apply
         working-directory: terraform
         run: |
           terraform apply -auto-approve \
             -var="project_id=$PROJECT_ID" \
             -var="region=$REGION" \
-            -var="image=gcr.io/$PROJECT_ID/react-app:${{ github.sha }}"
+            -var="image=$IMAGE:${{ github.sha }}"

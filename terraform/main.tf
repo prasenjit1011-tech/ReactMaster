@@ -1,4 +1,4 @@
-terraform {
+\terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -13,16 +13,14 @@ provider "google" {
 }
 
 # -----------------------------
-# Enable required APIs
+# Enable APIs
 # -----------------------------
-resource "google_project_service" "run" {
+resource "google_project_service" "run_api" {
   project = "terraform-497011"
   service = "run.googleapis.com"
 }
 
-
-
-resource "google_project_service" "artifactregistry" {
+resource "google_project_service" "artifact_registry_api" {
   project = "terraform-497011"
   service = "artifactregistry.googleapis.com"
 }
@@ -30,7 +28,7 @@ resource "google_project_service" "artifactregistry" {
 # -----------------------------
 # Service Account
 # -----------------------------
-resource "google_service_account" "sa" {
+resource "google_service_account" "cloudrun_sa" {
   project      = "terraform-497011"
   account_id   = "cloudrun-sa"
   display_name = "Cloud Run Service Account"
@@ -39,41 +37,35 @@ resource "google_service_account" "sa" {
 resource "google_project_iam_member" "artifact_writer" {
   project = "terraform-497011"
   role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${google_service_account.sa.email}"
+  member  = "serviceAccount:${google_service_account.cloudrun_sa.email}"
 }
+
 # -----------------------------
-# Artifact Registry (Docker repo)
+# Artifact Registry (Docker Repo)
 # -----------------------------
 resource "google_artifact_registry_repository" "docker_repo" {
   project       = "terraform-497011"
-
   location      = "asia-south1"
-  repository_id = "my-repo"
-  description   = "Docker repo for Cloud Run"
+  repository_id = "react-app"
+  description   = "Docker repo for React app"
   format        = "DOCKER"
 
-  depends_on = [google_project_service.artifactregistry]
+  depends_on = [google_project_service.artifact_registry_api]
 }
 
-
-resource "google_project_service" "iam" {
-  project = "terraform-497011"
-  service = "iam.googleapis.com"
-}
 # -----------------------------
-# Cloud Run Service (ONLY ONE)
+# Cloud Run Service (v2)
 # -----------------------------
-
 resource "google_cloud_run_v2_service" "app" {
   project  = "terraform-497011"
   name     = "react-cloudrun"
   location = "asia-south1"
 
   template {
-    service_account = google_service_account.sa.email
+    service_account = google_service_account.cloudrun_sa.email
 
     containers {
-      image = "asia-south1-docker.pkg.dev/terraform-497011/my-repo/react-app:latest"
+      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
 
       ports {
         container_port = 80
@@ -88,23 +80,18 @@ resource "google_cloud_run_v2_service" "app" {
 
   depends_on = [
     google_artifact_registry_repository.docker_repo,
-    google_project_service.run
+    google_project_service.run_api
   ]
 }
 
 # -----------------------------
-# Public access (frontend)
+# Public Access (Cloud Run Invoker)
 # -----------------------------
-resource "google_cloud_run_service_iam_member" "public" {
+resource "google_cloud_run_v2_service_iam_member" "public" {
   project  = "terraform-497011"
-  service  = google_cloud_run_service.app.name
-  location = google_cloud_run_service.app.location
-  role     = "roles/run.invoker"
-  member   = "allUsers"
+  location = "asia-south1"
+  name     = google_cloud_run_v2_service.app.name
+
+  role   = "roles/run.invoker"
+  member = "allUsers"
 }
-
-
-# New Code
-
-
-
