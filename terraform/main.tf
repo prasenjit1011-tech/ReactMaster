@@ -24,11 +24,10 @@ resource "google_cloud_run_v2_service" "app" {
   location = "asia-south1"
 
   template {
-    service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+    service_account = "[cloudrun-sa@terraform-497011.iam.gserviceaccount.com](mailto:cloudrun-sa@terraform-497011.iam.gserviceaccount.com)"
 
     containers {
       image = "asia-south1-docker.pkg.dev/terraform-497011/react-app-v2/react-app-v2:latest"
-
       ports {
         container_port = 80
       }
@@ -53,6 +52,7 @@ resource "google_cloud_run_v2_service_iam_member" "public" {
   role   = "roles/run.invoker"
   member = "allUsers"
 }
+
 
 
 # resource "google_project_service" "services" {
