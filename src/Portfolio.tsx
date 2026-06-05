@@ -34,7 +34,7 @@ const projects = [
     link: "https://scanofe.com/",
     stack: "Node.js, NestJS, PostgreSQL",
     desc: "Fetal diagnosis and ultrasound reporting system.",
-    image: "/screenshots/scanofe.png"
+    image: "/screenshots/scanofe1.png"
   },
   {
     title: "Pego Intranet – DMS",

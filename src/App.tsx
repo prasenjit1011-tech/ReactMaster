@@ -312,6 +312,7 @@ function App() {
 
       <div className="flex flex-wrap gap-2">
         {[
+          "Cloud Run",
           "Cloud Functions",
           "Cloud Workflows",
           "Cloud Storage",
