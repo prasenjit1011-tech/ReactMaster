@@ -24,7 +24,7 @@ function App() {
 
   <div className="mt-10 flex flex-wrap justify-center gap-4">
 
-    {/* GCP - subtle current */}
+    {/* GCP (current) */}
     <a
       href="#"
       rel="noreferrer"
@@ -51,6 +51,15 @@ function App() {
       Azure Services
     </a>
 
+    {/* Portfolio - GCP Cloud Run */}
+    <a
+      href="https://prasenjit1011.netlify.app/"
+      rel="noreferrer"
+      className="px-6 py-3 rounded-xl text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition font-medium"
+    >
+      Portfolio
+    </a>
+
     {/* GitHub */}
     <a
       href="https://github.com/prasenjit1011"
@@ -60,6 +69,7 @@ function App() {
     >
       GitHub Repo
     </a>
+
   </div>
 </section>
 
