@@ -38,26 +38,31 @@ resource "google_project_iam_member" "artifact_writer" {
   project = "terraform-497011"
   role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${google_service_account.cloudrun_sa.email}"
+
+  depends_on = [
+    google_service_account.cloudrun_sa
+  ]
 }
 
-resource "google_project_service" "iam_api" {
-  project = "terraform-497011"
-  service = "iam.googleapis.com"
-}
+
+# resource "google_project_service" "iam_api" {
+#   project = "terraform-497011"
+#   service = "iam.googleapis.com"
+# }
 
 
 # -----------------------------
 # Artifact Registry (Docker Repo)
 # -----------------------------
-resource "google_artifact_registry_repository" "docker_repo" {
-  project       = "terraform-497011"
-  location      = "asia-south1"
-  repository_id = "react-app"
-  description   = "Docker repo for React app"
-  format        = "DOCKER"
+# resource "google_artifact_registry_repository" "docker_repo" {
+#   project       = "terraform-497011"
+#   location      = "asia-south1"
+#   repository_id = "react-app"
+#   description   = "Docker repo for React app"
+#   format        = "DOCKER"
 
-  # depends_on = [google_project_service.artifact_registry_api]
-}
+#   # depends_on = [google_project_service.artifact_registry_api]
+# }
 
 # -----------------------------
 # Cloud Run Service (v2)
@@ -83,6 +88,11 @@ resource "google_cloud_run_v2_service" "app" {
     percent = 100
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
+
+  depends_on = [
+    google_service_account.cloudrun_sa,
+    google_project_iam_member.artifact_writer
+  ]
 
   # depends_on = [
   #   google_artifact_registry_repository.docker_repo,
