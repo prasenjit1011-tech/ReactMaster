@@ -39,9 +39,9 @@ resource "google_project_iam_member" "artifact_writer" {
   role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${"cloudrun-sa@terraform-497011.iam.gserviceaccount.com"}"
 
-  depends_on = [
-    google_service_account.cloudrun_sa
-  ]
+  # depends_on = [
+  #   google_service_account.cloudrun_sa
+  # ]
 }
 
 
@@ -90,7 +90,7 @@ resource "google_cloud_run_v2_service" "app" {
   }
 
   depends_on = [
-    google_service_account.cloudrun_sa,
+    # google_service_account.cloudrun_sa,
     google_project_iam_member.artifact_writer
   ]
 
