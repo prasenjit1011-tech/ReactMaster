@@ -28,16 +28,16 @@ provider "google" {
 # -----------------------------
 # Service Account
 # -----------------------------
-resource "google_service_account" "cloudrun_sa" {
-  project      = "terraform-497011"
-  account_id   = "cloudrun-sa"
-  display_name = "Cloud Run Service Account"
-}
+# resource "google_service_account" "cloudrun_sa" {
+#   project      = "terraform-497011"
+#   account_id   = "cloudrun-sa"
+#   display_name = "Cloud Run Service Account"
+# }
 
 resource "google_project_iam_member" "artifact_writer" {
   project = "terraform-497011"
   role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:${google_service_account.cloudrun_sa.email}"
+  member  = "serviceAccount:${"cloudrun-sa@terraform-497011.iam.gserviceaccount.com"}"
 
   depends_on = [
     google_service_account.cloudrun_sa
@@ -73,7 +73,7 @@ resource "google_cloud_run_v2_service" "app" {
   location = "asia-south1"
 
   template {
-    service_account = google_service_account.cloudrun_sa.email
+    service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
 
     containers {
       image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
