@@ -56,12 +56,15 @@ resource "google_artifact_registry_repository" "docker_repo" {
 }
 
 
-
+resource "google_project_service" "iam" {
+  project = "terraform-497011"
+  service = "iam.googleapis.com"
+}
 # -----------------------------
 # Cloud Run Service (ONLY ONE)
 # -----------------------------
 
-resource "google_cloud_run_service" "app" {
+resource "google_cloud_run_v2_service" "app" {
   project  = "terraform-497011"
   name     = "react-cloudrun"
   location = "asia-south1"
@@ -95,12 +98,12 @@ resource "google_cloud_run_service" "app" {
 # Public access (frontend)
 # -----------------------------
 resource "google_cloud_run_service_iam_member" "public" {
+  project  = "terraform-497011"
   service  = google_cloud_run_service.app.name
   location = google_cloud_run_service.app.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
-
 
 
 # New Code
