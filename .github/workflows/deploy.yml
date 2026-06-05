@@ -3,7 +3,7 @@ name: Deploy React App to AWS Amplify
 on:
   push:
     branches:
-      - amplify_main
+      - amplify_main_bk01
 
 permissions:
   id-token: write
