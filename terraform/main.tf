@@ -14,14 +14,14 @@ provider "google" {
 
 resource "google_cloud_run_v2_service" "app" {
   project  = "terraform-497011"
-  name     = "react-cloudrun"
+  name     = "react-cloudrun-v2"
   location = "asia-south1"
 
   template {
     service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
 
     containers {
-      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
+      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app-v2/react-app-v2:latest"
 
       ports {
         container_port = 80
