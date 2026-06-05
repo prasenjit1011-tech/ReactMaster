@@ -12,7 +12,7 @@ jobs:
     env:
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       REGION: asia-south1
-      IMAGE: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react-app/react-app
+      IMAGE: asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/react-app-v2/react-app-v2:latest
 
     steps:
       - name: Checkout
