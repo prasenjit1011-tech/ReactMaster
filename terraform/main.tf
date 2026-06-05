@@ -28,17 +28,23 @@ provider "google" {
 # -----------------------------
 # Service Account
 # -----------------------------
-resource "google_service_account" "cloudrun_sa" {
-  project      = "terraform-497011"
-  account_id   = "cloudrun-sa"
-  display_name = "Cloud Run Service Account"
-}
+# resource "google_service_account" "cloudrun_sa" {
+#   project      = "terraform-497011"
+#   account_id   = "cloudrun-sa"
+#   display_name = "Cloud Run Service Account"
+# }
 
 resource "google_project_iam_member" "artifact_writer" {
   project = "terraform-497011"
   role    = "roles/artifactregistry.writer"
   member  = "serviceAccount:${google_service_account.cloudrun_sa.email}"
 }
+
+resource "google_project_service" "iam_api" {
+  project = "terraform-497011"
+  service = "iam.googleapis.com"
+}
+
 
 # -----------------------------
 # Artifact Registry (Docker Repo)
