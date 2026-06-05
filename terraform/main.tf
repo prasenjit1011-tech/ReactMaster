@@ -20,7 +20,7 @@ resource "google_project_iam_member" "artifact_writer" {
 
 resource "google_cloud_run_v2_service" "app" {
   project  = "terraform-497011"
-  name     = "react-cloudrun-v2"
+  name     = "react-cloudrun-v3"
   location = "asia-south1"
 
   template {
