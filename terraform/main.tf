@@ -1,8 +1,10 @@
 terraform {
+  required_version = ">= 1.5"
+
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 }
@@ -12,151 +14,56 @@ provider "google" {
   region  = "asia-south1"
 }
 
-resource "google_project_iam_member" "artifact_writer" {
+resource "google_project_service" "services" {
+  for_each = toset([
+    "run.googleapis.com",
+    "artifactregistry.googleapis.com",
+    "cloudbuild.googleapis.com",
+    "iamcredentials.googleapis.com"
+  ])
+
   project = "terraform-497011"
-  role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+  service = each.value
+
+  disable_on_destroy = false
+}
+
+resource "google_artifact_registry_repository" "repo" {
+  depends_on = [google_project_service.services]
+
+  location      = "asia-south1"
+  repository_id = "react-repo"
+  description   = "Docker repository"
+  format        = "DOCKER"
 }
 
 resource "google_cloud_run_v2_service" "app" {
-  project  = "terraform-497011"
-  name     = "gcpcloudrun"
+  depends_on = [
+    google_project_service.services,
+    google_artifact_registry_repository.repo
+  ]
+
+  name     = "react-cloudrun"
   location = "asia-south1"
 
   template {
-    service_account = "[cloudrun@terraform-497011.iam.gserviceaccount.com](mailto:cloudrun-sa@terraform-497011.iam.gserviceaccount.com)"
+    service_account = "cloudrun@terraform-497011.iam.gserviceaccount.com"
 
     containers {
-      image = "asia-south1-docker.pkg.dev/terraform-497011/react-app-v2/react-app-v2:latest"
+      image = "nginx:latest"
+
       ports {
         container_port = 80
       }
     }
   }
 
-  traffic {
-    percent = 100
-    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
-  }
-
-  depends_on = [
-    google_project_iam_member.artifact_writer
-  ]
+  ingress = "INGRESS_TRAFFIC_ALL"
 }
 
-resource "google_cloud_run_v2_service_iam_member" "public" {
-  project  = "terraform-497011"
-  location = "asia-south1"
-  name     = google_cloud_run_v2_service.app.name
-
-  role   = "roles/run.invoker"
-  member = "allUsers"
+resource "google_cloud_run_service_iam_member" "public" {
+  location = google_cloud_run_v2_service.app.location
+  service  = google_cloud_run_v2_service.app.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
 }
-
-
-
-# resource "google_project_service" "services" {
-#   for_each = toset([
-#     "run.googleapis.com",
-#     "artifactregistry.googleapis.com",
-#     "cloudbuild.googleapis.com",
-#     "iam.googleapis.com"
-#   ])
-
-#   project = "terraform-497011"
-#   service = each.value
-
-#   disable_on_destroy = false
-# }
-
-# -----------------------------
-# Enable APIs
-# -----------------------------
-# resource "google_project_service" "run_api" {
-#   project = "terraform-497011"
-#   service = "run.googleapis.com"
-# }
-
-# resource "google_project_service" "artifact_registry_api" {
-#   project = "terraform-497011"
-#   service = "artifactregistry.googleapis.com"
-# }
-
-# -----------------------------
-# Service Account
-# -----------------------------
-# resource "google_service_account" "cloudrun_sa" {
-#   project      = "terraform-497011"
-#   account_id   = "cloudrun-sa"
-#   display_name = "Cloud Run Service Account"
-# }
-
-# resource "google_project_iam_member" "artifact_writer" {
-#   project = "terraform-497011"
-#   role    = "roles/artifactregistry.writer"
-#   member  = "serviceAccount:${"cloudrun-sa@terraform-497011.iam.gserviceaccount.com"}"
-
-#   # depends_on = [
-#   #   google_service_account.cloudrun_sa
-#   # ]
-# }
-
-
-# resource "google_project_service" "iam_api" {
-#   project = "terraform-497011"
-#   service = "iam.googleapis.com"
-# }
-
-
-# -----------------------------
-# Artifact Registry (Docker Repo)
-# -----------------------------
-# resource "google_artifact_registry_repository" "docker_repo" {
-#   project       = "terraform-497011"
-#   location      = "asia-south1"
-#   repository_id = "react-app"
-#   description   = "Docker repo for React app"
-#   format        = "DOCKER"
-
-#   # depends_on = [google_project_service.artifact_registry_api]
-# }
-
-# -----------------------------
-# Cloud Run Service (v2)
-# -----------------------------
-# resource "google_cloud_run_v2_service" "app" {
-#   project  = "terraform-497011"
-#   name     = "react-cloudrun"
-#   location = "asia-south1"
-
-#   template {
-#     service_account = "cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
-
-#     containers {
-#       image = "asia-south1-docker.pkg.dev/terraform-497011/react-app/react-app:latest"
-
-#       ports {
-#         container_port = 80
-#       }
-#     }
-#   }
-
-#   traffic {
-#     percent = 100
-#     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
-#   }
-
-#   depends_on = [
-#     # google_service_account.cloudrun_sa,
-#     google_project_iam_member.artifact_writer
-#   ]
-
-#   # depends_on = [
-#   #   google_artifact_registry_repository.docker_repo,
-#   #   google_project_service.run_api
-#   # ]
-# }
-
-# -----------------------------
-# Public Access (Cloud Run Invoker)
-# -----------------------------
