@@ -104,7 +104,7 @@ function App() {
       <div className="flex items-center gap-3 mb-5">
         <span className="text-3xl">🎨</span>
         <h3 className="font-bold text-xl text-cyan-400">
-          Frontend
+          Frontend Technologies
         </h3>
       </div>
 
