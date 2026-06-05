@@ -12,6 +12,12 @@ provider "google" {
   region  = "asia-south1"
 }
 
+resource "google_project_iam_member" "artifact_writer" {
+  project = "terraform-497011"
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+}
+
 resource "google_cloud_run_v2_service" "app" {
   project  = "terraform-497011"
   name     = "react-cloudrun-v2"
@@ -33,13 +39,10 @@ resource "google_cloud_run_v2_service" "app" {
     percent = 100
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
-  depends_on = [google_project_iam_member.artifact_writer]
-}
 
-resource "google_project_iam_member" "artifact_writer" {
-  project = "terraform-497011"
-  role    = "roles/artifactregistry.writer"
-  member  = "serviceAccount:cloudrun-sa@terraform-497011.iam.gserviceaccount.com"
+  depends_on = [
+    google_project_iam_member.artifact_writer
+  ]
 }
 
 resource "google_cloud_run_v2_service_iam_member" "public" {
@@ -50,19 +53,6 @@ resource "google_cloud_run_v2_service_iam_member" "public" {
   role   = "roles/run.invoker"
   member = "allUsers"
 }
-
-
-# Added to create Artifact Registry repository for Docker images
-resource "google_artifact_registry_repository" "docker_repo" {
-  project       = "terraform-497011"
-  location      = "asia-south1"
-  repository_id = "react-app-v2"
-  format         = "DOCKER"
-}
-
-
-
-
 
 
 # resource "google_project_service" "services" {
