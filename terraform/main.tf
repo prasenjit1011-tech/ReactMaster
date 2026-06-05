@@ -15,15 +15,15 @@ provider "google" {
 # -----------------------------
 # Enable APIs
 # -----------------------------
-resource "google_project_service" "run_api" {
-  project = "terraform-497011"
-  service = "run.googleapis.com"
-}
+# resource "google_project_service" "run_api" {
+#   project = "terraform-497011"
+#   service = "run.googleapis.com"
+# }
 
-resource "google_project_service" "artifact_registry_api" {
-  project = "terraform-497011"
-  service = "artifactregistry.googleapis.com"
-}
+# resource "google_project_service" "artifact_registry_api" {
+#   project = "terraform-497011"
+#   service = "artifactregistry.googleapis.com"
+# }
 
 # -----------------------------
 # Service Account
@@ -50,7 +50,7 @@ resource "google_artifact_registry_repository" "docker_repo" {
   description   = "Docker repo for React app"
   format        = "DOCKER"
 
-  depends_on = [google_project_service.artifact_registry_api]
+  # depends_on = [google_project_service.artifact_registry_api]
 }
 
 # -----------------------------
