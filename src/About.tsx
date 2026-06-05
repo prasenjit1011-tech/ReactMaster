@@ -16,6 +16,14 @@ const About = () => {
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
+            {/* AWS */}
+            <a
+            href="https://amplify-main.d3pnc5v5s4imgn.amplifyapp.com/"
+            rel="noreferrer"
+            className="px-6 py-3 rounded-xl border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 transition"
+            >
+            AWS Services
+            </a>
 
             {/* GCP (current) */}
             <a
@@ -24,15 +32,6 @@ const About = () => {
             className="px-6 py-3 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 hover:bg-blue-500/30 transition"
             >
             GCP Services
-            </a>
-
-            {/* AWS */}
-            <a
-            href="https://amplify-main.d3pnc5v5s4imgn.amplifyapp.com/"
-            rel="noreferrer"
-            className="px-6 py-3 rounded-xl border border-orange-500/40 text-orange-400 hover:bg-orange-500/10 transition"
-            >
-            AWS Services
             </a>
 
             {/* Azure */}
