@@ -1,3 +1,4 @@
+import About from "./About";
 import "./App.css";
 import Portfolio from "./Portfolio";
 
@@ -7,41 +8,7 @@ function App() {
       <div className="max-w-7xl mx-auto p-6">
 
         {/* Hero */}
-        <section className="py-20 text-center">
-          <h1 className="text-6xl font-bold">
-            Prasenjit Aluni
-          </h1>
-
-          <p className="text-cyan-400 text-2xl mt-4">
-            Senior Full Stack Developer | MERN Stack | Cloud & DevOps
-          </p>
-
-          <p className="mt-6 max-w-4xl mx-auto text-slate-300">
-            15+ years of experience in website development, scalable web
-            applications, REST APIs, cloud-native deployments, fintech,
-            healthcare, SaaS and e-commerce.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <a
-              href="https://prasenjit1011.netlify.app/"
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3 bg-cyan-500 rounded-lg font-semibold hover:bg-cyan-600 transition"
-            >
-              Portfolio
-            </a>
-
-            <a
-              href="https://github.com/prasenjit1011"
-              target="_blank"
-              rel="noreferrer"
-              className="px-6 py-3 border border-slate-700 rounded-lg hover:bg-slate-900 transition"
-            >
-              GitHub
-            </a>
-          </div>
-        </section>
+        <About />
 
         {/* Stats */}
         
