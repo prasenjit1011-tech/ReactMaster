@@ -56,7 +56,7 @@ resource "google_cloud_run_v2_service_iam_member" "public" {
 resource "google_artifact_registry_repository" "docker_repo" {
   project       = "terraform-497011"
   location      = "asia-south1"
-  repository_id = "react-app"
+  repository_id = "react-app-v2"
   format         = "DOCKER"
 }
 
