@@ -28,6 +28,17 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Create Artifact Registry if missing
+        run: |
+          gcloud artifacts repositories describe react-repo \
+            --location=asia-south1 \
+            --project=terraform-497011 \
+          || gcloud artifacts repositories create react-repo \
+            --repository-format=docker \
+            --location=asia-south1 \
+            --description="Docker repository" \
+            --project=terraform-497011
+
       - name: Configure Docker
         run: |
           gcloud auth configure-docker asia-south1-docker.pkg.dev --quiet
