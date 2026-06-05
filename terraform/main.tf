@@ -70,22 +70,20 @@ resource "google_cloud_run_v2_service" "app" {
   location = "asia-south1"
 
   template {
-    spec {
-      service_account_name = google_service_account.sa.email
+    service_account = google_service_account.sa.email
 
-      containers {
-        image = "asia-south1-docker.pkg.dev/terraform-497011/my-repo/react-app:latest"
+    containers {
+      image = "asia-south1-docker.pkg.dev/terraform-497011/my-repo/react-app:latest"
 
-        ports {
-          container_port = 80
-        }
+      ports {
+        container_port = 80
       }
     }
   }
 
   traffic {
-    percent         = 100
-    latest_revision = true
+    percent = 100
+    type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
 
   depends_on = [
