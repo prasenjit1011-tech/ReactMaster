@@ -78,10 +78,10 @@ resource "google_cloud_run_v2_service" "app" {
     type    = "TRAFFIC_TARGET_ALLOCATION_TYPE_LATEST"
   }
 
-  depends_on = [
-    google_artifact_registry_repository.docker_repo,
-    google_project_service.run_api
-  ]
+  # depends_on = [
+  #   google_artifact_registry_repository.docker_repo,
+  #   google_project_service.run_api
+  # ]
 }
 
 # -----------------------------
