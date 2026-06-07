@@ -10,53 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Check secrets
-        run: |
-          echo "CLIENT_ID=${CLIENT_ID:+SET}"
-          echo "TENANT_ID=${TENANT_ID:+SET}"
-          echo "SUBSCRIPTION_ID=${SUBSCRIPTION_ID:+SET}"
-        env:
-          CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      - name: Check secret lengths
-        run: |
-          echo "CLIENT_ID length: ${#CLIENT_ID}"
-          echo "TENANT_ID length: ${#TENANT_ID}"
-          echo "SUBSCRIPTION_ID length: ${#SUBSCRIPTION_ID}"
-        env:
-          CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-          SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Checkout Source
+        uses: actions/checkout@v4
 
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: ACR Login
+      - name: Verify Azure Account
+        run: |
+          az account show
+
+      - name: Login to Azure Container Registry
         run: |
           az acr login --name ${{ secrets.ACR_NAME }}
 
-      - name: Build Image
+      - name: Build Docker Image
         run: |
           docker build -t react:latest .
 
-      - name: Tag Image
+      - name: Tag Docker Image
         run: |
-          docker tag react:latest ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
+          docker tag react:latest \
+            ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
 
-      - name: Push Image
+      - name: Push Docker Image
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
 
-      - name: Update Container App
+      - name: Update Azure Container App
         run: |
           az containerapp update \
             --name react-app \
