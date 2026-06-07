@@ -1,16 +1,23 @@
-name: Deploy React
+name: Deploy React App to Azure Container Apps
 
 on:
   push:
     branches:
       - terraform_azure_container_apps
 
+env:
+  RESOURCE_GROUP: Azure_React_Action
+  CONTAINER_APP_NAME: react-app
+  CONTAINER_ENV_NAME: react-env
+  ACR_NAME: reactacr2026
+  IMAGE_NAME: react
+
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Azure Login
@@ -18,30 +25,80 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Verify Azure Account
-        run: |
-          az account show
-
       - name: Login to Azure Container Registry
         run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
+          az acr login --name $ACR_NAME
 
       - name: Build Docker Image
         run: |
-          docker build -t react:latest .
-
-      - name: Tag Docker Image
-        run: |
-          docker tag react:latest \
-            ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
+          docker build -t $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} .
+          docker tag \
+            $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} \
+            $ACR_NAME.azurecr.io/$IMAGE_NAME:latest
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
+          docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+          docker push $ACR_NAME.azurecr.io/$IMAGE_NAME:latest
 
-      - name: Update Azure Container App
+      - name: Enable ACR Admin Account
         run: |
-          az containerapp update \
-            --name react-app \
-            --resource-group ${{ secrets.RESOURCE_GROUP }} \
-            --image ${{ secrets.ACR_LOGIN_SERVER }}/react:latest
+          az acr update \
+            --name $ACR_NAME \
+            --admin-enabled true
+
+      - name: Get ACR Credentials
+        id: acr
+        run: |
+          USERNAME=$(az acr credential show \
+            --name $ACR_NAME \
+            --query username \
+            --output tsv)
+
+          PASSWORD=$(az acr credential show \
+            --name $ACR_NAME \
+            --query passwords[0].value \
+            --output tsv)
+
+          echo "username=$USERNAME" >> $GITHUB_OUTPUT
+          echo "password=$PASSWORD" >> $GITHUB_OUTPUT
+
+      - name: Create or Update Container App
+        run: |
+          if az containerapp show \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP >/dev/null 2>&1; then
+
+            echo "Container App exists. Updating..."
+
+            az containerapp update \
+              --name $CONTAINER_APP_NAME \
+              --resource-group $RESOURCE_GROUP \
+              --image $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }}
+
+          else
+
+            echo "Container App does not exist. Creating..."
+
+            az containerapp create \
+              --name $CONTAINER_APP_NAME \
+              --resource-group $RESOURCE_GROUP \
+              --environment $CONTAINER_ENV_NAME \
+              --image $ACR_NAME.azurecr.io/$IMAGE_NAME:${{ github.sha }} \
+              --target-port 80 \
+              --ingress external \
+              --registry-server $ACR_NAME.azurecr.io \
+              --registry-username ${{ steps.acr.outputs.username }} \
+              --registry-password ${{ steps.acr.outputs.password }}
+
+          fi
+
+      - name: Display Application URL
+        run: |
+          APP_URL=$(az containerapp show \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --query properties.configuration.ingress.fqdn \
+            --output tsv)
+
+          echo "Application URL: https://$APP_URL"
