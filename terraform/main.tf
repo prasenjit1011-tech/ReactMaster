@@ -1,69 +1,71 @@
 terraform {
-  required_version = ">= 1.5"
-
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 6.0"
+    azurerm = {
+      source = "hashicorp/azurerm"
     }
   }
 }
 
-provider "google" {
-  project = "terraform-497011"
-  region  = "asia-south1"
+provider "azurerm" {
+  features {}
 }
 
-resource "google_project_service" "services" {
-  for_each = toset([
-    "run.googleapis.com",
-    "artifactregistry.googleapis.com",
-    "cloudbuild.googleapis.com",
-    "iamcredentials.googleapis.com"
-  ])
-
-  project = "terraform-497011"
-  service = each.value
-
-  disable_on_destroy = false
+resource "azurerm_resource_group" "rg" {
+  name     = "react-rg"
+  location = "Central India"
 }
 
-resource "google_artifact_registry_repository" "repo" {
-  depends_on = [google_project_service.services]
+resource "azurerm_container_registry" "acr" {
+  name                = "reactacr12345"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
 
-  location      = "asia-south1"
-  repository_id = "react-repo"
-  description   = "Docker repository"
-  format        = "DOCKER"
+  sku           = "Basic"
+  admin_enabled = true
 }
 
-resource "google_cloud_run_v2_service" "app" {
-  depends_on = [
-    google_project_service.services,
-    google_artifact_registry_repository.repo
-  ]
+resource "azurerm_container_app_environment" "env" {
+  name                       = "react-env"
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name        = azurerm_resource_group.rg.name
+}
 
-  name     = "react-cloudrun"
-  location = "asia-south1"
+resource "azurerm_container_app" "app" {
+
+  name                         = "react-app"
+  container_app_environment_id = azurerm_container_app_environment.env.id
+  resource_group_name          = azurerm_resource_group.rg.name
+
+  revision_mode = "Single"
 
   template {
-    service_account = "cloudrun@terraform-497011.iam.gserviceaccount.com"
 
-    containers {
-      image = "nginx:latest"
-
-      ports {
-        container_port = 80
-      }
+    container {
+      name   = "react"
+      image  = "${azurerm_container_registry.acr.login_server}/react:latest"
+      cpu    = 0.25
+      memory = "0.5Gi"
     }
   }
 
-  ingress = "INGRESS_TRAFFIC_ALL"
-}
+  ingress {
+    external_enabled = true
+    target_port      = 80
 
-resource "google_cloud_run_service_iam_member" "public" {
-  location = google_cloud_run_v2_service.app.location
-  service  = google_cloud_run_v2_service.app.name
-  role     = "roles/run.invoker"
-  member   = "allUsers"
+    traffic_weight {
+      percentage = 100
+      latest_revision = true
+    }
+  }
+
+  registry {
+    server               = azurerm_container_registry.acr.login_server
+    username             = azurerm_container_registry.acr.admin_username
+    password_secret_name = "acr-password"
+  }
+
+  secret {
+    name  = "acr-password"
+    value = azurerm_container_registry.acr.admin_password
+  }
 }
