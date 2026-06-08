@@ -11,7 +11,7 @@ permissions:
   id-token: write
 
 env:
-  RESOURCE_GROUP: portfolio-rg
+  RESOURCE_GROUP: ReactStaticWebApp2026_group
   CONTAINER_APP: portfolio-app
   CONTAINER_APP_ENV: portfolio-env
   IMAGE_NAME: ghcr.io/prasenjit1011/reactmaster:latest
