@@ -13,17 +13,11 @@ provider "azurerm" {
   features {}
 }
 
-# ==================================================
-# RESOURCE GROUP
-# ==================================================
 resource "azurerm_resource_group" "rg" {
   name     = "ReactStaticWebApp2026_group"
   location = "East Asia"
 }
 
-# ==================================================
-# LOG ANALYTICS (REQUIRED FOR CONTAINER APPS)
-# ==================================================
 resource "azurerm_log_analytics_workspace" "law" {
   name                = "portfolio-law"
   location            = azurerm_resource_group.rg.location
@@ -32,9 +26,6 @@ resource "azurerm_log_analytics_workspace" "law" {
   retention_in_days   = 1
 }
 
-# ==================================================
-# CONTAINER APPS ENVIRONMENT (FIXES YOUR ERROR)
-# ==================================================
 resource "azurerm_container_app_environment" "env" {
   name                       = "portfolio-env"
   location                   = azurerm_resource_group.rg.location
@@ -42,9 +33,6 @@ resource "azurerm_container_app_environment" "env" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
 }
 
-# ==================================================
-# CONTAINER APP
-# ==================================================
 resource "azurerm_container_app" "app" {
   name                         = "portfolio-app"
   container_app_environment_id = azurerm_container_app_environment.env.id
@@ -72,9 +60,6 @@ resource "azurerm_container_app" "app" {
   }
 }
 
-# ==================================================
-# OUTPUT URL
-# ==================================================
 output "container_app_url" {
   value = azurerm_container_app.app.latest_revision_fqdn
 }
