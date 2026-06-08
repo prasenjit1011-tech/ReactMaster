@@ -45,7 +45,7 @@ const About = () => {
 
             {/* Portfolio - GCP Cloud Run */}
             <a
-            href="https://prasenjit1011.netlify.app/"
+            href="https://j4t3c8u9u1.execute-api.us-east-1.amazonaws.com/"
             rel="noreferrer"
             className="px-6 py-3 rounded-xl text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition font-medium"
             >
