@@ -3,7 +3,7 @@ name: Deploy React to Cloud Run
 on:
   push:
     branches:
-      - terraform_gcp_cloud_run
+      - terraform_gcp_cloud_run_test
 
 jobs:
   deploy:
