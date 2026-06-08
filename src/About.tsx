@@ -27,25 +27,25 @@ const About = () => {
 
             {/* GCP (current) */}
             <a
-            href="#"
+            href="https://react-cloudrun-334684044157.asia-south1.run.app/"
             rel="noreferrer"
-            className="px-6 py-3 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-500/40 hover:bg-blue-500/30 transition"
+            className="px-6 py-3 rounded-xl text-blue-300 border border-blue-500/40 hover:bg-blue-500/30 transition"
             >
             GCP Services
             </a>
 
-            {/* Azure */}
+            {/* Azure Static Web Apps */}
             <a
             href="#"
             rel="noreferrer"
-            className="px-6 py-3 rounded-xl border border-sky-500/40 text-sky-400 hover:bg-sky-500/10 transition"
+            className="px-6 py-3 rounded-xl border border-sky-500/40 bg-sky-500/20 text-sky-400 hover:bg-sky-500/10 transition"
             >
             Azure Services
             </a>
 
             {/* Portfolio - GCP Cloud Run */}
             <a
-            href="https://prasenjit1011.netlify.app/"
+            href="https://j4t3c8u9u1.execute-api.us-east-1.amazonaws.com/"
             rel="noreferrer"
             className="px-6 py-3 rounded-xl text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition font-medium"
             >
