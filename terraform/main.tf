@@ -1,59 +1,69 @@
 terraform {
-  required_version = ">= 1.5.0"
-
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~> 3.100"
     }
   }
-}
 
-variable "subscription_id" {
-  description = "Azure Subscription ID"
-  type        = string
+  required_version = ">= 1.5.0"
 }
 
 provider "azurerm" {
   features {}
-  subscription_id = var.subscription_id
 }
 
+# ==================================================
+# RESOURCE GROUP
+# ==================================================
 resource "azurerm_resource_group" "rg" {
   name     = "ReactStaticWebApp2026_group"
-  location = "Central India"
+  location = "East Asia"
 }
 
-resource "azurerm_container_app_environment" "env" {
-  name                = "portfolio-env"
+# ==================================================
+# LOG ANALYTICS (REQUIRED FOR CONTAINER APPS)
+# ==================================================
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "portfolio-law"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-
-  # No Log Analytics Workspace
-  # No logs_destination
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
 }
 
+# ==================================================
+# CONTAINER APPS ENVIRONMENT (FIXES YOUR ERROR)
+# ==================================================
+resource "azurerm_container_app_environment" "env" {
+  name                       = "portfolio-env"
+  location                   = azurerm_resource_group.rg.location
+  resource_group_name       = azurerm_resource_group.rg.name
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
+}
+
+# ==================================================
+# CONTAINER APP
+# ==================================================
 resource "azurerm_container_app" "app" {
   name                         = "portfolio-app"
-  resource_group_name          = azurerm_resource_group.rg.name
   container_app_environment_id = azurerm_container_app_environment.env.id
+  resource_group_name          = azurerm_resource_group.rg.name
   revision_mode                = "Single"
 
   template {
-    min_replicas = 0
-    max_replicas = 1
-
     container {
-      name   = "portfolio"
+      name   = "react-app"
       image  = "ghcr.io/prasenjit1011/reactmaster:latest"
-      cpu    = 0.25
-      memory = "0.5Gi"
+      cpu    = 0.5
+      memory = "1Gi"
     }
   }
 
   ingress {
     external_enabled = true
     target_port      = 80
+    transport        = "auto"
 
     traffic_weight {
       latest_revision = true
@@ -62,22 +72,9 @@ resource "azurerm_container_app" "app" {
   }
 }
 
+# ==================================================
+# OUTPUT URL
+# ==================================================
 output "container_app_url" {
-  value = "https://${azurerm_container_app.app.latest_revision_fqdn}"
-}
-
-output "container_app_environment_domain" {
-  value = azurerm_container_app_environment.env.default_domain
-}
-
-output "container_app_id" {
-  value = azurerm_container_app.app.id
-}
-
-output "container_app_environment_id" {
-  value = azurerm_container_app_environment.env.id
-}
-
-output "resource_group_name" {
-  value = azurerm_resource_group.rg.name
+  value = azurerm_container_app.app.latest_revision_fqdn
 }
