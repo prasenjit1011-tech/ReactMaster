@@ -36,7 +36,7 @@ const About = () => {
 
             {/* Azure */}
             <a
-            href="#"
+            href="https://happy-dune-08b101900.7.azurestaticapps.net/"
             rel="noreferrer"
             className="px-6 py-3 rounded-xl border border-sky-500/40 text-sky-400 hover:bg-sky-500/10 transition"
             >
