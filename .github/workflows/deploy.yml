@@ -75,6 +75,21 @@ jobs:
             --resource-group $RESOURCE_GROUP \
             --output table || echo "Container App not found"
 
+      - name: Create Container App Environment
+        run: |
+          az containerapp env create \
+            --name $CONTAINER_APP_ENV \
+            --resource-group $RESOURCE_GROUP \
+            --location eastasia
+
+      - name: Check Container App
+        run: |
+          echo "=== Container App ==="
+          az containerapp show \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --output table || echo "Container App not found"
+
       - name: List Resources in Resource Group
         run: |
           echo "=== Resources ==="
