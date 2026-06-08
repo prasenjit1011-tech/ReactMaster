@@ -20,7 +20,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "portfolio-rg"
+  name     = "ReactStaticWebApp2026_group"
   location = "Central India"
 }
 
