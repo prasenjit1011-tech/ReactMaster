@@ -1,13 +1,23 @@
 terraform {
+  required_version = ">= 1.5.0"
+
   required_providers {
     azurerm = {
-      source = "hashicorp/azurerm"
+      source  = "hashicorp/azurerm"
+      version = "~> 4.0"
     }
   }
 }
 
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+}
+
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -15,57 +25,23 @@ resource "azurerm_resource_group" "rg" {
   location = "Central India"
 }
 
-resource "azurerm_container_registry" "acr" {
-  name                = "reactacr12345"
+resource "azurerm_static_web_app" "react" {
+  name                = "react-static-app-2026"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  location            = "Central US"
 
-  sku           = "Basic"
-  admin_enabled = true
+  sku_tier = "Free"
+  sku_size = "Free"
 }
 
-resource "azurerm_container_app_environment" "env" {
-  name                       = "react-env"
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
+output "resource_group_name" {
+  value = azurerm_resource_group.rg.name
 }
 
-resource "azurerm_container_app" "app" {
+output "static_web_app_name" {
+  value = azurerm_static_web_app.react.name
+}
 
-  name                         = "react-app"
-  container_app_environment_id = azurerm_container_app_environment.env.id
-  resource_group_name          = azurerm_resource_group.rg.name
-
-  revision_mode = "Single"
-
-  template {
-
-    container {
-      name   = "react"
-      image  = "${azurerm_container_registry.acr.login_server}/react:latest"
-      cpu    = 0.25
-      memory = "0.5Gi"
-    }
-  }
-
-  ingress {
-    external_enabled = true
-    target_port      = 80
-
-    traffic_weight {
-      percentage = 100
-      latest_revision = true
-    }
-  }
-
-  registry {
-    server               = azurerm_container_registry.acr.login_server
-    username             = azurerm_container_registry.acr.admin_username
-    password_secret_name = "acr-password"
-  }
-
-  secret {
-    name  = "acr-password"
-    value = azurerm_container_registry.acr.admin_password
-  }
+output "default_host_name" {
+  value = azurerm_static_web_app.react.default_host_name
 }
