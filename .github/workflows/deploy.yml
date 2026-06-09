@@ -3,7 +3,7 @@ name: Build and Deploy React Portfolio
 on:
   push:
     branches:
-      - terraform_azure_container_apps_02
+      - terraform_azure_container_apps_02_test
 
 permissions:
   contents: read
@@ -50,171 +50,178 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Install Container Apps Extension
-        run: az extension add --name containerapp --upgrade
+        run: |
+          if az extension show --name containerapp >/dev/null 2>&1; then
+            echo "ℹ️ Container Apps extension already installed"
+          else
+            echo "⬇️ Installing Container Apps extension..."
+            az extension add --name containerapp --upgrade
+            echo "✅ Installed Container Apps extension"
+          fi
 
-      # # Step 1 :
-      # - name: Check or Create Resource Group
+      # Step 1 :
+      - name: Check or Create Resource Group
+        run: |
+          echo "=== 01: Resource Group Status ==="
+
+          if az group show --name "$RESOURCE_GROUP" >/dev/null 2>&1; then
+            echo "Resource Group already exists"
+          else
+            echo "Creating Resource Group..."
+            az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output table
+          fi
+
+          echo "=== Resource Group List ==="
+          az group show --name "$RESOURCE_GROUP" --output table || echo "Resource Group not found"
+
+
+      # Step 2 :
+      - name: Check or Create Container App Environment
+        run: |
+          echo "=== 02: Container App Environment Status ==="
+          if az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
+            echo "Environment already exists"
+          else
+            echo "Creating Environment..."
+            az containerapp env create --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --location eastasia
+          fi
+
+          echo "=== Container App Environment List ==="
+          az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --output table || echo "Container App Environment not found"
+
+
+      # Step 3 : Container App
+      # - name: Check Container App
       #   run: |
-      #     echo "=== 01: Resource Group Status ==="
+      #     echo "=== Container App ==="
+      #     az containerapp show \
+      #       --name $CONTAINER_APP \
+      #       --resource-group $RESOURCE_GROUP \
+      #       --output table || echo "Container App not found"
 
-      #     if az group show --name "$RESOURCE_GROUP" >/dev/null 2>&1; then
-      #       echo "Resource Group already exists"
+      # - name: Ensure Container App Exists
+      #   run: |
+      #     if ! az containerapp show \
+      #       --name $CONTAINER_APP \
+      #       --resource-group $RESOURCE_GROUP >/dev/null 2>&1; then
+
+      #       echo "Creating Container App..."
+
+      #       az containerapp create \
+      #         --name $CONTAINER_APP \
+      #         --resource-group $RESOURCE_GROUP \
+      #         --environment $CONTAINER_APP_ENV \
+      #         --image $IMAGE_NAME \
+      #         --target-port 80 \
+      #         --ingress external \
+      #         --cpu 0.25 \
+      #         --memory 0.5Gi
+
       #     else
-      #       echo "Creating Resource Group..."
-      #       az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output table
+      #       echo "Updating Container App..."
+
+      #       az containerapp update \
+      #         --name $CONTAINER_APP \
+      #         --resource-group $RESOURCE_GROUP \
+      #         --image $IMAGE_NAME
       #     fi
 
-      #     echo "=== Resource Group List ==="
-      #     az group show --name "$RESOURCE_GROUP" --output table || echo "Resource Group not found"
+
+      # Step 4:
+      - name: List Resources in Resource Group
+        run: |
+          echo "=== List Resources in Resource Group ==="
+          az resource list --resource-group $RESOURCE_GROUP --output table
 
 
-      # # Step 2 :
-      # - name: Check or Create Container App Environment
+
+      # Step 5:
+      # - name: Deploy Container App
       #   run: |
-      #     echo "=== 02: Container App Environment Status ==="
-      #     if az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
-      #       echo "Environment already exists"
-      #     else
-      #       echo "Creating Environment..."
-      #       az containerapp env create --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --location eastasia
-      #     fi
+      #     az containerapp up \
+      #       --name $CONTAINER_APP \
+      #       --resource-group $RESOURCE_GROUP \
+      #       --environment $CONTAINER_APP_ENV \
+      #       --image $IMAGE_NAME \
+      #       --target-port 80 \
+      #       --ingress external \
+      #       --cpu 0.25 \
+      #       --memory 0.5Gi
 
-      #     echo "=== Container App Environment List ==="
-      #     az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --output table || echo "Container App Environment not found"
-
-
-      # # Step 3 : Container App
-      # # - name: Check Container App
-      # #   run: |
-      # #     echo "=== Container App ==="
-      # #     az containerapp show \
-      # #       --name $CONTAINER_APP \
-      # #       --resource-group $RESOURCE_GROUP \
-      # #       --output table || echo "Container App not found"
-
-      # # - name: Ensure Container App Exists
-      # #   run: |
-      # #     if ! az containerapp show \
-      # #       --name $CONTAINER_APP \
-      # #       --resource-group $RESOURCE_GROUP >/dev/null 2>&1; then
-
-      # #       echo "Creating Container App..."
-
-      # #       az containerapp create \
-      # #         --name $CONTAINER_APP \
-      # #         --resource-group $RESOURCE_GROUP \
-      # #         --environment $CONTAINER_APP_ENV \
-      # #         --image $IMAGE_NAME \
-      # #         --target-port 80 \
-      # #         --ingress external \
-      # #         --cpu 0.25 \
-      # #         --memory 0.5Gi
-
-      # #     else
-      # #       echo "Updating Container App..."
-
-      # #       az containerapp update \
-      # #         --name $CONTAINER_APP \
-      # #         --resource-group $RESOURCE_GROUP \
-      # #         --image $IMAGE_NAME
-      # #     fi
-
-
-      # # Step 4:
-      # - name: List Resources in Resource Group
+      # Step 6:
+      # - name: Show URL
       #   run: |
-      #     echo "=== List Resources in Resource Group ==="
-      #     az resource list --resource-group $RESOURCE_GROUP --output table
+      #     az containerapp show \
+      #       --name $CONTAINER_APP \
+      #       --resource-group $RESOURCE_GROUP \
+      #       --query properties.configuration.ingress.fqdn \
+      #       -o tsv
 
 
+      - name: Wait 30 Minutes
+        run: sleep 180
 
-      # # Step 5:
-      # # - name: Deploy Container App
-      # #   run: |
-      # #     az containerapp up \
-      # #       --name $CONTAINER_APP \
-      # #       --resource-group $RESOURCE_GROUP \
-      # #       --environment $CONTAINER_APP_ENV \
-      # #       --image $IMAGE_NAME \
-      # #       --target-port 80 \
-      # #       --ingress external \
-      # #       --cpu 0.25 \
-      # #       --memory 0.5Gi
-
-      # # Step 6:
-      # # - name: Show URL
-      # #   run: |
-      # #     az containerapp show \
-      # #       --name $CONTAINER_APP \
-      # #       --resource-group $RESOURCE_GROUP \
-      # #       --query properties.configuration.ingress.fqdn \
-      # #       -o tsv
+      - name: Delete Container App
+        run: |
+          echo "== 01: Delete Container App =="
+          if az containerapp show --name "$CONTAINER_APP" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
+            if az containerapp delete --name "$CONTAINER_APP" --resource-group "$RESOURCE_GROUP" --yes; then
+              echo "✅ Container App deleted successfully"
+            else
+              echo "❌ Failed to delete Container App"
+              exit 1
+            fi
+          else
+            echo "ℹ️ Container App does not exist"
+          fi
 
 
-      # - name: Wait 30 Minutes
-      #   run: sleep 180
-
-      # - name: Delete Container App
-      #   run: |
-      #     echo "== 01: Delete Container App =="
-      #     if az containerapp show --name "$CONTAINER_APP" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
-      #       if az containerapp delete --name "$CONTAINER_APP" --resource-group "$RESOURCE_GROUP" --yes; then
-      #         echo "✅ Container App deleted successfully"
-      #       else
-      #         echo "❌ Failed to delete Container App"
-      #         exit 1
-      #       fi
-      #     else
-      #       echo "ℹ️ Container App does not exist"
-      #     fi
+      - name: Delete Container App Environment
+        run: |
+          echo "== 02: Delete Container App Environment =="
+          if az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
+            if az containerapp env delete --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --yes; then
+              echo "✅ Container App Environment deleted successfully"
+            else
+              echo "❌ Failed to delete Container App Environment"
+              exit 1
+            fi
+          else
+            echo "ℹ️ Container App Environment does not exist"
+          fi
 
 
-      # - name: Delete Container App Environment
-      #   run: |
-      #     echo "== 02: Delete Container App Environment =="
-      #     if az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
-      #       if az containerapp env delete --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" --yes; then
-      #         echo "✅ Container App Environment deleted successfully"
-      #       else
-      #         echo "❌ Failed to delete Container App Environment"
-      #         exit 1
-      #       fi
-      #     else
-      #       echo "ℹ️ Container App Environment does not exist"
-      #     fi
+      - name: Delete Log Analytics Workspace (Dynamic)
+        run: |
+          echo "== 04: Delete Log Analytics Workspace =="
+          # Get first workspace name in the resource group
+          WORKSPACE_NAME=$(az monitor log-analytics workspace list \
+            --resource-group "$RESOURCE_GROUP" \
+            --query "[0].name" -o tsv)
 
+          if [ -z "$WORKSPACE_NAME" ]; then
+            echo "ℹ️ No Log Analytics Workspace found"
+            exit 0
+          fi
 
-      # - name: Delete Log Analytics Workspace (Dynamic)
-      #   run: |
-      #     echo "== 04: Delete Log Analytics Workspace =="
-      #     # Get first workspace name in the resource group
-      #     WORKSPACE_NAME=$(az monitor log-analytics workspace list \
-      #       --resource-group "$RESOURCE_GROUP" \
-      #       --query "[0].name" -o tsv)
+          echo "Found Workspace: $WORKSPACE_NAME"
 
-      #     if [ -z "$WORKSPACE_NAME" ]; then
-      #       echo "ℹ️ No Log Analytics Workspace found"
-      #       exit 0
-      #     fi
+          if az monitor log-analytics workspace show \
+            --workspace-name "$WORKSPACE_NAME" \
+            --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
 
-      #     echo "Found Workspace: $WORKSPACE_NAME"
-
-      #     if az monitor log-analytics workspace show \
-      #       --workspace-name "$WORKSPACE_NAME" \
-      #       --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
-
-      #       if az monitor log-analytics workspace delete \
-      #         --workspace-name "$WORKSPACE_NAME" \
-      #         --resource-group "$RESOURCE_GROUP" \
-      #         --yes; then
-      #         echo "✅ Log Analytics Workspace deleted successfully"
-      #       else
-      #         echo "❌ Failed to delete Log Analytics Workspace"
-      #         exit 1
-      #       fi
-      #     else
-      #       echo "ℹ️ Workspace not found (already deleted?)"
-      #     fi
+            if az monitor log-analytics workspace delete \
+              --workspace-name "$WORKSPACE_NAME" \
+              --resource-group "$RESOURCE_GROUP" \
+              --yes; then
+              echo "✅ Log Analytics Workspace deleted successfully"
+            else
+              echo "❌ Failed to delete Log Analytics Workspace"
+              exit 1
+            fi
+          else
+            echo "ℹ️ Workspace not found (already deleted?)"
+          fi
 
 
       # Check All Deletion Completed
