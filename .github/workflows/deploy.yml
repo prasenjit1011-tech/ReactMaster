@@ -51,13 +51,7 @@ jobs:
 
       - name: Install Container Apps Extension
         run: |
-          if az extension show --name containerapp >/dev/null 2>&1; then
-            echo "ℹ️ Container Apps extension already installed"
-          else
-            echo "⬇️ Installing Container Apps extension..."
-            az extension add --name containerapp --upgrade
-            echo "✅ Installed Container Apps extension"
-          fi
+          az extension add --name containerapp --upgrade --yes
 
       # Step 1 :
       - name: Check or Create Resource Group
