@@ -39,6 +39,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Show Actor
+        run: echo "Actor = ${{ github.actor }}"
+
       - name: Build Image
         run: docker build -t $IMAGE_NAME .
 
