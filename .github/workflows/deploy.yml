@@ -128,6 +128,7 @@ jobs:
 
 
 
+      # Step 5:
       # - name: Deploy Container App
       #   run: |
       #     az containerapp up \
@@ -140,6 +141,7 @@ jobs:
       #       --cpu 0.25 \
       #       --memory 0.5Gi
 
+      # Step 6:
       # - name: Show URL
       #   run: |
       #     az containerapp show \
@@ -147,6 +149,7 @@ jobs:
       #       --resource-group $RESOURCE_GROUP \
       #       --query properties.configuration.ingress.fqdn \
       #       -o tsv
+
 
       - name: Wait 30 Minutes
         run: sleep 180
@@ -181,14 +184,6 @@ jobs:
           fi
 
 
-
-      - name: Delete Log Analytics Workspace
-        run: |
-          az monitor log-analytics workspace delete \
-            --workspace-name workspace-eacttaticebpp2026groupOc9Y \
-            --resource-group "$RESOURCE_GROUP" \
-            --yes
-
       - name: Delete Log Analytics Workspace (Dynamic)
         run: |
           echo "== 04: Delete Log Analytics Workspace =="
@@ -217,13 +212,53 @@ jobs:
               echo "❌ Failed to delete Log Analytics Workspace"
               exit 1
             fi
-
           else
             echo "ℹ️ Workspace not found (already deleted?)"
           fi
 
 
+      # Check All Deletion Completed
+      - name: Set Subscription
+        run: |
+          az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+
       - name: Log Analytics Workspace List
         run: |
           echo "== 04: Log Analytics Workspace List =="
-          az monitor log-analytics workspace list --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" --output table
+
+          COUNT=$(az monitor log-analytics workspace list \
+            --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+            --query "length(@)" -o tsv)
+
+          if [ "$COUNT" -eq 0 ]; then
+            echo "ℹ️ No Log Analytics Workspaces found"
+          else
+            az monitor log-analytics workspace list \
+              --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
+              --output table
+          fi
+
+      - name: List Container App Environments
+        run: |
+          echo "== Container App Environments =="
+
+          RESULT=$(az containerapp env list --output table)
+
+          if [ -z "$RESULT" ] || [ "$RESULT" = "[]" ]; then
+            echo "ℹ️ No Container App Environments found"
+          else
+            echo "$RESULT"
+          fi
+
+
+      - name: List Container Apps
+        run: |
+          echo "== Container Apps =="
+
+          RESULT=$(az containerapp list --output table)
+
+          if [ -z "$RESULT" ] || [ "$RESULT" = "[]" ]; then
+            echo "ℹ️ No Container Apps found"
+          else
+            echo "$RESULT"
+          fi
