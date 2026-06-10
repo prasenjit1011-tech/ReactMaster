@@ -36,7 +36,7 @@ function App() {
   {/* Quick Stats */}
   <div className="grid md:grid-cols-4 gap-4 mb-10">
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-            <h3 className="text-3xl font-bold text-cyan-400">15+</h3>
+            <h3 className="text-3xl font-bold text-cyan-400">10+</h3>
             <p>Years Experience</p>
           </div>
 
