@@ -154,39 +154,39 @@ jobs:
           az monitor log-analytics workspace list --output table
 
       # Step 3 : 
-      # - name: Create or Update Container App
-      #   run: |
-      #     echo "=== 03: Container App Status ==="
-      #     if ! az containerapp show \
-      #       --name $CONTAINER_APP \
-      #       --resource-group $RESOURCE_GROUP >/dev/null 2>&1; then
+      - name: Create or Update Container App
+        run: |
+          echo "=== 03: Container App Status ==="
+          if ! az containerapp show \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP >/dev/null 2>&1; then
 
-      #       echo "Container App not found. Creating Container App..."
+            echo "Container App not found. Creating Container App..."
 
-      #       az containerapp create \
-      #         --name $CONTAINER_APP \
-      #         --resource-group $RESOURCE_GROUP \
-      #         --environment $CONTAINER_APP_ENV \
-      #         --image $IMAGE_NAME \
-      #         --target-port 80 \
-      #         --ingress external \
-      #         --cpu 0.25 \
-      #         --memory 0.5Gi
+            az containerapp create \
+              --name $CONTAINER_APP \
+              --resource-group $RESOURCE_GROUP \
+              --environment $CONTAINER_APP_ENV \
+              --image $IMAGE_NAME \
+              --target-port 80 \
+              --ingress external \
+              --cpu 0.25 \
+              --memory 0.5Gi
 
-      #     else
-      #       echo "Container App found. Updating Container App..."
+          else
+            echo "Container App found. Updating Container App..."
 
-      #       az containerapp update \
-      #         --name $CONTAINER_APP \
-      #         --resource-group $RESOURCE_GROUP \
-      #         --image $IMAGE_NAME
-      #     fi
+            az containerapp update \
+              --name $CONTAINER_APP \
+              --resource-group $RESOURCE_GROUP \
+              --image $IMAGE_NAME
+          fi
 
-      #     echo "=== Container App Details ==="
-      #     az containerapp show \
-      #       --name $CONTAINER_APP \
-      #       --resource-group $RESOURCE_GROUP \
-      #       --output table || echo "Container App not found"
+          echo "=== Container App Details ==="
+          az containerapp show \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --output table || echo "Container App not found"
 
       # Step 4:
       - name: List Resources in Resource Group
@@ -195,28 +195,27 @@ jobs:
           az resource list --resource-group $RESOURCE_GROUP --output table
 
 
-
       # Step 5:
-      # - name: Deploy Container App
-      #   run: |
-      #     az containerapp up \
-      #       --name $CONTAINER_APP \
-      #       --resource-group $RESOURCE_GROUP \
-      #       --environment $CONTAINER_APP_ENV \
-      #       --image $IMAGE_NAME \
-      #       --target-port 80 \
-      #       --ingress external \
-      #       --cpu 0.25 \
-      #       --memory 0.5Gi
+      - name: Deploy Container App
+        run: |
+          az containerapp up \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --environment $CONTAINER_APP_ENV \
+            --image $IMAGE_NAME \
+            --target-port 80 \
+            --ingress external \
+            --cpu 0.25 \
+            --memory 0.5Gi
 
       # Step 6:
-      # - name: Show URL
-      #   run: |
-      #     az containerapp show \
-      #       --name $CONTAINER_APP \
-      #       --resource-group $RESOURCE_GROUP \
-      #       --query properties.configuration.ingress.fqdn \
-      #       -o tsv
+      - name: Show URL
+        run: |
+          az containerapp show \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --query properties.configuration.ingress.fqdn \
+            -o tsv
 
 
       - name: Wait 30 Minutes
@@ -330,3 +329,9 @@ jobs:
           else
             echo "$RESULT"
           fi
+
+      # Step 4:
+      - name: List Resources in Resource Group
+        run: |
+          echo "=== List Resources in Resource Group ==="
+          az resource list --resource-group $RESOURCE_GROUP --output table
