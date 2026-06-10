@@ -10,7 +10,7 @@ const About = () => {
         </p>
 
         <p className="mt-6 max-w-3xl mx-auto text-slate-300 leading-relaxed text-base md:text-lg">
-            15+ years of experience in website development, scalable web
+            10+ years of experience in website development, scalable web
             applications, REST APIs, cloud-native deployments, fintech,
             healthcare, SaaS and e-commerce.
         </p>

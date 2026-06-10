@@ -106,8 +106,8 @@ function App() {
       <li>Node.js</li>
       <li>Express.js</li>
       <li>NestJS</li>
-      <li>FastAPI</li>
-      <li>Laravel</li>
+      <li>Python-FastAPI-Flask</li>
+      <li>PHP-Laravel</li>
       <li>REST APIs</li>
     </ul>
 
@@ -188,7 +188,6 @@ function App() {
 
     <div className="flex flex-wrap gap-3">
       {[
-        "AWS",
         "Terraform",
         "GitHub Actions",
         "CI/CD",
@@ -285,6 +284,9 @@ function App() {
 
       <div className="flex flex-wrap gap-2">
         {[
+          "Static Web Apps", 
+          "Container Apps", 
+          "SQL Database",
           "Virtual Machines",
           "Load Balancer",
           "Blob Storage",
@@ -312,11 +314,12 @@ function App() {
 
       <div className="flex flex-wrap gap-2">
         {[
-          "Cloud Run",
+          "Cloud Run", 
+          "Pub/Sub",          
           "Cloud Functions",
           "Cloud Workflows",
           "Cloud Storage",
-          "Compute Engine",
+          "Compute Engine (VM)",
           "Cloud SQL",
           "Load Balancing",
         ].map((item) => (
