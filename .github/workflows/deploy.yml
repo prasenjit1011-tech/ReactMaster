@@ -3,7 +3,7 @@ name: Build and Deploy React Portfolio
 on:
   push:
     branches:
-      - terraform_azure_container_apps_02_test
+      - terraform_azure_container_apps_02
 
 permissions:
   contents: read
