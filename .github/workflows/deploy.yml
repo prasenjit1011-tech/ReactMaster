@@ -3,7 +3,7 @@ name: Build and Deploy React Portfolio
 on:
   push:
     branches:
-      - terraform_azure_container_apps_02
+      - terraform_azure_container_apps_final_test
 
 permissions:
   contents: read
@@ -190,6 +190,7 @@ jobs:
 
       # Step 4:
       - name: List Resources in Resource Group
+        if: always()
         run: |
           echo "=== List Resources in Resource Group ==="
           az resource list --resource-group $RESOURCE_GROUP --output table
@@ -237,6 +238,7 @@ jobs:
         run: sleep 180
 
       - name: Delete Container App
+        if: always()
         run: |
           echo "== 01: Delete Container App =="
           if az containerapp show --name "$CONTAINER_APP" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
@@ -252,6 +254,7 @@ jobs:
 
 
       - name: Delete Container App Environment
+        if: always()
         run: |
           echo "== 02: Delete Container App Environment =="
           if az containerapp env show --name "$CONTAINER_APP_ENV" --resource-group "$RESOURCE_GROUP" >/dev/null 2>&1; then
@@ -267,6 +270,7 @@ jobs:
 
 
       - name: Delete Log Analytics Workspace (Dynamic)
+        if: always()
         run: |
           echo "== 04: Delete Log Analytics Workspace =="
           # Get first workspace name in the resource group
@@ -301,10 +305,12 @@ jobs:
 
       # Check All Deletion Completed
       - name: Set Subscription
+        if: always()
         run: |
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
       - name: Log Analytics Workspace List
+        if: always()
         run: |
           echo "== 04: Log Analytics Workspace List =="
 
@@ -321,6 +327,7 @@ jobs:
           fi
 
       - name: List Container App Environments
+        if: always()
         run: |
           echo "== Container App Environments =="
 
@@ -334,6 +341,7 @@ jobs:
 
 
       - name: List Container Apps
+        if: always()
         run: |
           echo "== Container Apps =="
 
@@ -347,6 +355,7 @@ jobs:
 
       # Step 4:
       - name: List Resources in Resource Group
+        if: always()
         run: |
           echo "=== List Resources in Resource Group ==="
           az resource list --resource-group $RESOURCE_GROUP --output table
