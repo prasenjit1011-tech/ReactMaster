@@ -204,9 +204,24 @@ jobs:
             --environment $CONTAINER_APP_ENV \
             --image $IMAGE_NAME \
             --target-port 80 \
-            --ingress external \
-            --cpu 0.25 \
-            --memory 0.5Gi
+            --ingress external
+
+          # az containerapp update \
+          #   --name portfolio-app \
+          #   --resource-group ReactStaticWebApp2026_group \
+          #   --cpu 0.25 \
+          #   --memory 0.5Gi
+
+          # az containerapp create \
+          #   --name portfolio-app \
+          #   --resource-group ReactStaticWebApp2026_group \
+          #   --image ghcr.io/prasenjit1011/reactmaster:latest \
+          #   --environment portfolio-env \
+          #   --cpu 0.25 \
+          #   --memory 0.5Gi \
+          #   --ingress external \
+          #   --target-port 80
+
 
       # Step 6:
       - name: Show URL
