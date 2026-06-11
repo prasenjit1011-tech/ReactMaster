@@ -8,10 +8,6 @@ function App() {
       <div className="max-w-7xl mx-auto p-6">
 
         <About />
-        
-
-        
-
         {/* Skills */}
 
 
@@ -188,13 +184,15 @@ function App() {
 
     <div className="flex flex-wrap gap-3">
       {[
-        "AWS",
         "Terraform",
         "GitHub Actions",
         "CI/CD",
         "Docker",
         "System Design",
         "Microservices",
+        "Jest",
+        "Cypress",
+        "SonarQube",
         "Kafka",
         "Redis",
         "Event-Driven Architecture",
