@@ -73,21 +73,6 @@ jobs:
           az group show --name "$RESOURCE_GROUP" --output table || echo "Resource Group not found"
 
 
-
-
-      # az monitor log-analytics workspace create \
-      #   --resource-group "$RESOURCE_GROUP" \
-      #   --workspace-name myworkspace
-
-      # az containerapp env create \
-      #   --name "$CONTAINER_APP_ENV" \
-      #   --resource-group "$RESOURCE_GROUP" \
-      #   --location eastasia \
-      #   --logs-workspace-id <workspace-id> \
-      #   --logs-workspace-key <workspace-key>
-
-
-
       # Step 2 :
       - name: Check or Create Container App Environment
         run: |
@@ -153,6 +138,7 @@ jobs:
           echo "=== Container App Environment Log Analytics List ==="
           az monitor log-analytics workspace list --output table
 
+
       # Step 3 : 
       - name: Create or Update Container App
         run: |
@@ -188,6 +174,7 @@ jobs:
             --resource-group $RESOURCE_GROUP \
             --output table || echo "Container App not found"
 
+
       # Step 4:
       - name: List Resources in Resource Group
         if: always()
@@ -217,7 +204,7 @@ jobs:
             -o tsv
 
 
-      - name: Wait 30 Minutes
+      - name: Wait 1 Minutes
         run: sleep 60
 
       - name: Delete Container App
@@ -285,6 +272,8 @@ jobs:
             echo "ℹ️ Workspace not found (already deleted?)"
           fi
 
+      - name: Wait 5 Minutes
+        run: sleep 300
 
       # Check All Deletion Completed
       - name: Set Subscription
@@ -299,6 +288,10 @@ jobs:
           echo "== 01. List Subscriptions =="
           az account list --output table
 
+
+      - name: ACR List
+        if: always()
+        run: |
           echo "== 02. ACR List =="
           az acr list --output table
 
@@ -341,7 +334,7 @@ jobs:
       - name: List Container Apps
         if: always()
         run: |
-          echo "== Container Apps =="
+          echo "== Container Apps List =="
 
           RESULT=$(az containerapp list --output table)
 
