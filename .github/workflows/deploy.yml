@@ -3,7 +3,7 @@ name: Build and Deploy React Portfolio
 on:
   push:
     branches:
-      - terraform_azure_container_apps_final
+      - terraform_azure_container_apps_final_test
 
 permissions:
   contents: read
@@ -207,23 +207,6 @@ jobs:
             --target-port 80 \
             --ingress external
 
-          # az containerapp update \
-          #   --name portfolio-app \
-          #   --resource-group ReactStaticWebApp2026_group \
-          #   --cpu 0.25 \
-          #   --memory 0.5Gi
-
-          # az containerapp create \
-          #   --name portfolio-app \
-          #   --resource-group ReactStaticWebApp2026_group \
-          #   --image ghcr.io/prasenjit1011/reactmaster:latest \
-          #   --environment portfolio-env \
-          #   --cpu 0.25 \
-          #   --memory 0.5Gi \
-          #   --ingress external \
-          #   --target-port 80
-
-
       # Step 6:
       - name: Show URL
         run: |
@@ -235,7 +218,7 @@ jobs:
 
 
       - name: Wait 30 Minutes
-        run: sleep 180
+        run: sleep 60
 
       - name: Delete Container App
         if: always()
@@ -309,6 +292,20 @@ jobs:
         run: |
           az account set --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
 
+
+      - name: List Subscriptions
+        if: always()
+        run: |
+          echo "== 01. List Subscriptions =="
+          az account list --output table
+
+          echo "== 02. ACR List =="
+          az acr list --output table
+
+          echo "== 03. Resource List =="
+          az resource list --query "[?type=='Microsoft.ContainerRegistry/registries']" -o table
+
+
       - name: Log Analytics Workspace List
         if: always()
         run: |
@@ -325,6 +322,7 @@ jobs:
               --subscription "${{ secrets.AZURE_SUBSCRIPTION_ID }}" \
               --output table
           fi
+
 
       - name: List Container App Environments
         if: always()
@@ -352,6 +350,7 @@ jobs:
           else
             echo "$RESULT"
           fi
+
 
       # Step 4:
       - name: List Resources in Resource Group
