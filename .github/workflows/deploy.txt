@@ -3,7 +3,7 @@
 # on:
 #   push:
 #     branches:
-#       - terraform_azure_container_apps_02
+#       - terraform_azure_container_apps_final
 
 # permissions:
 #   contents: read
