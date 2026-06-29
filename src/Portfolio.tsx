@@ -9,6 +9,13 @@ const projects = [
     image: "/screenshots/creditt1.png"
   },
   {
+    title: "Adda – Video streaming application",
+    link: "https://www.addatimes.com/",
+    stack: "Node.js, Express, PostgreSQL",
+    desc: "Addatimes is a web portal for video streaming.",
+    image: "/screenshots/adda.png"
+  },
+  {
     title: "NowThingsToDo – Travel Booking Platform",
     link: "https://www.nowthingstodo.com",
     stack: "ReactJS, NodeJS, Strapi, MongoDB",
@@ -61,7 +68,8 @@ const projects = [
 
 const Portfolio = () => {
   return (
-    <section className="py-16 px-6 bg-gray-950 text-white">
+    <section className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8">
+    
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-10">
           Key Projects
@@ -71,7 +79,7 @@ const Portfolio = () => {
           {projects.map((p, i) => (
             <div
               key={i}
-              className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:scale-[1.02] transition"
+              className="bg-slate-900 border border-gray-800 rounded-xl overflow-hidden hover:scale-[1.02] transition"
             >
               {/* Screenshot */}
               <img
