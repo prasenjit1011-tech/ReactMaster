@@ -11,7 +11,7 @@ const projects = [
   {
     title: "Adda – Video streaming application",
     link: "https://www.addatimes.com/",
-    stack: "Node.js, Express, PostgreSQL",
+    stack: "React (NextJS), Node (Express, NestJS), MongoDB",
     desc: "Addatimes is a web portal for video streaming.",
     image: "/screenshots/adda.png"
   },
