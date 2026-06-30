@@ -16,6 +16,15 @@ const About = () => {
         </p>
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
+            {/* Portfolio - GCP Cloud Run */}
+            <a
+            href="https://j4t3c8u9u1.execute-api.us-east-1.amazonaws.com/"
+            rel="noreferrer"
+            className="px-6 py-3 rounded-xl text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition font-medium"
+            >
+            Portfolio
+            </a>
+
             {/* AWS */}
             <a
             href="https://amplify-main.d3pnc5v5s4imgn.amplifyapp.com/"
@@ -41,15 +50,6 @@ const About = () => {
             className="px-6 py-3 rounded-xl border border-sky-500/40 text-sky-400 hover:bg-sky-500/10 transition"
             >
             Azure Services
-            </a>
-
-            {/* Portfolio - GCP Cloud Run */}
-            <a
-            href="https://j4t3c8u9u1.execute-api.us-east-1.amazonaws.com/"
-            rel="noreferrer"
-            className="px-6 py-3 rounded-xl text-emerald-300 border border-emerald-500/40 hover:border-emerald-400 transition font-medium"
-            >
-            Portfolio
             </a>
 
             {/* GitHub */}
